@@ -16,9 +16,13 @@ class SampleCollectionAdmin(
         (None, {
             'fields': [
                 'sample_collected',
+                'date_collected',
+                'test_type',
+                'test_type_other',
             ]}),
         audit_fieldset_tuple
     )
 
     radio_fields = {
-        'sample_collected': admin.VERTICAL, }
+        'sample_collected': admin.VERTICAL,
+        'test_type': admin.VERTICAL, }

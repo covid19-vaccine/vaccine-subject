@@ -1,7 +1,7 @@
-from edc_constants.constants import OTHER, NOT_APPLICABLE, UNKNOWN, POS, NEG, IND
+from edc_constants.constants import OTHER, NOT_APPLICABLE, UNKNOWN, POS, NEG, \
+    IND
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
-
 
 ACTION_TAKEN = (
     ('dose_not_changed', 'Dose not changed'),
@@ -37,11 +37,32 @@ AGREE = (
     ('undecided', 'Undecided'),
     ('strongly_agree', 'Strongly agree'),)
 
+HOSPITALIZATION_OUTCOME = (
+    ('expired', 'Expired'),
+    ('hospice_care', 'Home: Hospice Care'),
+    ('self_care', 'Home: Self Care'),
+    ('hospice_medical_facility', 'Hospice Medical Facility'),
+    ('inpatient_rehabilitation', 'Inpatient Rehabilitation'),
+    ('intermediate_care_facility', 'Intermediate Care Facility'),
+    ('medical_advice', 'Left Against Medical Advice'),
+    ('long_term_care_hospital', 'Long Term Care Hospital'),
+    ('nursing_facility', 'Nursing Facility'),
+    ('unit_ward_change', 'Unit/Ward Change'),
+)
+
+HOSPITALIZATION_REASON = (
+    ('covid19_related_symptoms', 'COVID-19 related symptoms'),
+    (OTHER, 'Other'),
+)
+
 HOSPITALIZATION_STATUS = (
     ('er', 'ER'),
     ('regular_ward', 'Regular Ward'),
     ('icu_hdu', 'ICU/HDU'),
 )
+INFECTION_STATUS = (
+    ('seronegative', 'Seronegative'),
+    ('seropositive', 'Seropositive'),)
 
 IDENTITY_TYPE = (
     ('country_id', 'Country ID number'),
@@ -64,31 +85,11 @@ OUTCOME = (
     (UNKNOWN, UNKNOWN),
 )
 
-
 POS_NEG_IND = (
     (POS, 'Positive'),
     (NEG, 'Negative'),
     (IND, 'Indeterminate')
 )
-
-ROUTE = (
-    ('intramuscular', 'Intramuscular'),
-    ('oral', 'Oral'),
-)
-
-INFECTION_STATUS = (
-    ('seronegative', 'Seronegative'),
-    ('seropositive', 'Seropositive'),)
-
-STATUS = (
-    ('resolved', 'Resolved'),
-    ('ongoing', 'Ongoing'),)
-
-TREATMENT_RELATIONSHIP = (
-    ('related', 'Related'),
-    ('not_related', 'Not Related'),
-)
-
 REASON = (
     ('not_collected', 'Not collected'),
     ('not_required', 'Not required at this visit'),
@@ -100,22 +101,24 @@ REASON = (
     (NOT_APPLICABLE, 'Not applicable'),
 )
 
-HOSPITALIZATION_REASON = (
-  ('covid19_related_symptoms', 'COVID-19 related symptoms'),
-  (OTHER, 'Other'),
+ROUTE = (
+    ('intramuscular', 'Intramuscular'),
+    ('oral', 'Oral'),
 )
 
-HOSPITALIZATION_OUTCOME = (
-    ('expired', 'Expired'),
-    ('hospice_care', 'Home: Hospice Care'),
-    ('self_care', 'Home: Self Care'),
-    ('hospice_medical_facility', 'Hospice Medical Facility'),
-    ('inpatient_rehabilitation', 'Inpatient Rehabilitation'),
-    ('intermediate_care_facility', 'Intermediate Care Facility'),
-    ('medical_advice', 'Left Against Medical Advice'),
-    ('long_term_care_hospital', 'Long Term Care Hospital'),
-    ('nursing_facility', 'Nursing Facility'),
-    ('unit_ward_change', 'Unit/Ward Change'),
+STATUS = (
+    ('resolved', 'Resolved'),
+    ('ongoing', 'Ongoing'),)
+
+TREATMENT_RELATIONSHIP = (
+    ('related', 'Related'),
+    ('not_related', 'Not Related'),
+)
+
+TEST_TYPE = (
+    ('pcr_test', 'PCR Test'),
+    ('nasal_Swab', 'Nasal Swab'),
+    (OTHER, 'Other, specify'),
 )
 
 VACCINATION_LOCATION = (
@@ -126,7 +129,8 @@ VACCINATION_LOCATION = (
 
 VISIT_INFO_SOURCE = (
     ('clinic_visit_w_subject', 'Clinic visit with participant'),
-    ('other_contact_w_subject', 'Other contact with participant (i.e telephone call)'),
+    ('other_contact_w_subject',
+     'Other contact with participant (i.e telephone call)'),
     ('contact_w_health_worker', 'Contact with health care worker'),
     ('Contact_w_family_design',
      'Contact with family or designated person who can provide information'),
