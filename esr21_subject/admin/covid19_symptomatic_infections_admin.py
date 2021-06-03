@@ -20,6 +20,7 @@ class Covid19SymptomaticInfectionsAdmin(
                 'infection_status',
                 'visits',
                 'hospitalisation_date',
+                'hospitalisation_details',
             ]}),
         audit_fieldset_tuple
     )

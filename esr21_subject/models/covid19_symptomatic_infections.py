@@ -28,6 +28,12 @@ class Covid19SymptomaticInfections(CrfModelMixin):
     hospitalisation_date = models.DateField(
         verbose_name='Date of hospitalisation:')
 
+    hospitalisation_details = models.TextField(
+        verbose_name='Date of hospitalisation:',
+        max_length=150,
+        blank=True,
+        null=True)
+
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'
         verbose_name = 'Covid19 Symptomatic Infections'
