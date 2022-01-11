@@ -260,7 +260,7 @@ class AdverseEventRecord(SiteModelMixin, BaseUuidModel):
         """Update AE number.
         """
         ae_number = 0
-        ae = self.objects.filter(
+        ae = self._meta.model.objects.filter(
             adverse_event=self.adverse_event).order_by('created')
         if ae:
             last_ae = ae.last()
