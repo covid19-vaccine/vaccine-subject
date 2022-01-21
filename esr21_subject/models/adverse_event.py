@@ -245,12 +245,14 @@ class AdverseEventRecord(SiteModelMixin, BaseUuidModel):
 
     @property
     def dob(self):
-        consent = InformedConsent.objects.filter(subject_identifier=self.adverse_event.subject_visit.subject_identifier).last()
+        consent = InformedConsent.objects.filter(
+            subject_identifier=self.adverse_event.subject_visit.subject_identifier).last()
         return consent.dob
 
     @property
     def gender(self):
-        consent = InformedConsent.objects.filter(subject_identifier=self.adverse_event.subject_visit.subject_identifier).last()
+        consent = InformedConsent.objects.filter(
+            subject_identifier=self.adverse_event.subject_visit.subject_identifier).last()
         return consent.gender
 
     history = HistoricalRecords()
@@ -260,7 +262,8 @@ class AdverseEventRecord(SiteModelMixin, BaseUuidModel):
         """Update AE number.
         """
         ae_number = 0
-        ae = self._meta.model.objects.filter(
+        ae_record_cls = self._meta.model
+        ae = ae_record_cls.objects.filter(
             adverse_event=self.adverse_event).order_by('created')
         if ae:
             last_ae = ae.last()

@@ -29,7 +29,7 @@ class ExportActionMixin:
         field_names = queryset[0].__dict__
         field_names = [a for a in field_names.keys()]
         field_names.remove('_state')
-        if getattr(queryset[0], 'maternal_visit', None):
+        if getattr(queryset[0], 'subject_visit', None):
             field_names[:0] = ['subject_identifier', 'consent_datetime', 'visit_code']
 
         for col_num in range(len(field_names)):
@@ -39,8 +39,8 @@ class ExportActionMixin:
             obj_data = obj.__dict__
             obj_data['subject_identifier'] = obj.subject_identifier
             obj_data['consent_datetime'] = self.get_consent_datetime(obj)
-            if getattr(obj, 'maternal_visit', None):
-                obj_data['visit_code'] = obj.maternal_visit.visit_code
+            if getattr(obj, 'subject_visit', None):
+                obj_data['visit_code'] = obj.subject_visit.visit_code
             data = [obj_data[field] for field in field_names]
 
             row_num += 1
@@ -52,7 +52,6 @@ class ExportActionMixin:
                     ws.write(row_num, col_num, data[col_num], xlwt.easyxf(
                         num_format_str='YYYY/MM/DD h:mm:ss'))
                 elif isinstance(data[col_num], datetime.date):
-                    data[col_num] = timezone.make_naive(data[col_num])
                     ws.write(row_num, col_num, data[col_num], xlwt.easyxf(
                         num_format_str='YYYY/MM/DD'))
                 else:
@@ -72,18 +71,17 @@ class ExportActionMixin:
 
     def get_consent_datetime(self, model_obj):
         subject_consent_cls = django_apps.get_model(
-            'td_maternal.subjectconsent')
+            'esr21_subject.informedconsent')
         consent_version = getattr(model_obj, 'consent_version', None)
         if consent_version:
             try:
-                maternal_consent = subject_consent_cls.objects.get(
+                subject_consent = subject_consent_cls.objects.get(
                     subject_identifier=model_obj.subject_identifier,
                     version=consent_version)
             except subject_consent_cls.DoesNotExist:
-                raise ValidationError('Missing Maternal Consent form.')
+                raise ValidationError('Missing Consent form.')
             else:
-                return maternal_consent.consent_datetime
-
+                return subject_consent.consent_datetime
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({
