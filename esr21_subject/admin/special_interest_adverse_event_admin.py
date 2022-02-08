@@ -20,6 +20,7 @@ class SpecialInterestAdverseEventInlineAdmin(StackedInlineMixin,
         ('Participants should be encouraged to report any adverse events reported in '
          'the AE form', {
              'fields': [
+                 'ae_number',
                  'aesi_name',
                  'meddra_pname',
                  'meddra_pcode',

@@ -31,6 +31,10 @@ class SpecialInterestAdverseEventRecord(SiteModelMixin, BaseUuidModel):
         SpecialInterestAdverseEvent,
         on_delete=models.PROTECT)
 
+    ae_number = models.PositiveIntegerField(
+        verbose_name='AE number',
+    )
+
     aesi_name = models.CharField(
         verbose_name='Name of the AESI',
         max_length=100)
