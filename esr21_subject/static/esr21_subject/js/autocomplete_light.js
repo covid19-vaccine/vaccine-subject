@@ -57,7 +57,7 @@ $(document).ready(function () {
 	        	}
 
 	        	// Toggle error message and loading (add and display to user).
-	        	toggleErrorMessage('Testing', index);
+	        	toggleErrorMessage('Failed to get details for selected term.', index);
 	        	setLoading(false);
 
 	    	} catch (err) {
