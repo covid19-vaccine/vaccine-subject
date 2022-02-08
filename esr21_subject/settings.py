@@ -34,8 +34,8 @@ DEBUG = True
 SITE_ID = 1
 ALLOWED_HOSTS = []
 ETC_DIR = '/etc/'
-DEVICE_ID =14
-DEVICE_ROLE='Client'
+DEVICE_ID = 14
+DEVICE_ROLE = 'Client'
 
 CONFIG_FILE = f'esr21.ini'
 
