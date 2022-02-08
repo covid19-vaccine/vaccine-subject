@@ -40,6 +40,7 @@ git+https://github.com/covid19-vaccine/esr21-metadata-rules.git@develop#esr21_me
 git+https://github.com/covid19-vaccine/esr21-prn.git@develop#egg=esr21_prn
 git+https://github.com/covid19-vaccine/esr21-reference.git@develop#esr21_reference
 git+https://github.com/covid19-vaccine/esr21-visit-schedule.git@develop#esr21_visit_schedule
+django-autocomplete-light
 django-countries
 setuptools~=57.4.0
 Django~=3.2.8

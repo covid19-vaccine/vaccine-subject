@@ -47,6 +47,8 @@ config.read(CONFIG_PATH)
 # Application definition
 
 INSTALLED_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -80,6 +82,7 @@ INSTALLED_APPS = [
     'esr21_subject.apps.EdcMetadataAppConfig',
     'esr21_subject.apps.EdcProtocolAppConfig',
     'esr21_subject.apps.EdcVisitTrackingAppConfig',
+    'esr21_subject.apps.EdcMeddraAppConfig',
     'esr21_subject.apps.AppConfig'
 ]
 
@@ -123,6 +126,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+MEDDRA_CONFIGURATION = {
+    'OPTIONS': {
+        'read_default_file': '/etc/esr21/meddra.conf',
+    },
 }
 
 # Password validation
