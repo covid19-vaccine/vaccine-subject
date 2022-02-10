@@ -1,4 +1,5 @@
 from django.apps import apps as django_apps
+from django.db.models.deletion import ProtectedError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_appointment.constants import COMPLETE_APPT, IN_PROGRESS_APPT, INCOMPLETE_APPT, NEW_APPT
@@ -8,7 +9,6 @@ from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from .adverse_event import AdverseEventRecord
 from .onschedule import OnSchedule
 from .screening_eligibility import ScreeningEligibility
-from django.db.models.deletion import ProtectedError
 
 
 @receiver(post_save, weak=False, sender=AdverseEventRecord,
@@ -32,7 +32,7 @@ def metadata_update_on_post_save(sender, instance, raw, created, using,
         else:
             if django_apps.get_app_config('edc_metadata_rules').metadata_rules_enabled:
                 instance.adverse_event.run_metadata_rules_for_crf()
-          
+
 
 @receiver(post_save, weak=False, sender=Appointment, dispatch_uid='appointment_on_post_save')
 def appointment_on_post_save(sender, instance, raw, created, **kwargs):
