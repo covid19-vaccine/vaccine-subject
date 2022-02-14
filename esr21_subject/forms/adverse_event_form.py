@@ -1,9 +1,9 @@
-from esr21_subject_validation.form_validators import AdverseEventRecordFormValidator
-
 from django import forms
 from django.apps import apps as django_apps
-from django.core.exceptions import ValidationError
 from edc_constants.constants import YES, NO
+from edc_meddra.form_mixin import MedDRAFormMixin
+from esr21_subject_validation.form_validators import AdverseEventRecordFormValidator
+
 
 from ..models import AdverseEvent, AdverseEventRecord
 from .form_mixins import SubjectModelFormMixin
@@ -20,10 +20,9 @@ class AdverseEventForm(SubjectModelFormMixin, forms.ModelForm):
     def clean(self):
         experienced_ae = self.data.get('experienced_ae')
         ae_count = int(self.data.get('adverseeventrecord_set-TOTAL_FORMS'))
-        ae_number = self.data.get('adverseeventrecord_set-0-ae_number')
-        if experienced_ae == YES and (ae_count == 0 or ae_number == ''):
-            msg = 'Participant has experienced an adverse event, '\
-            f'{self.ae_record_cls._meta.verbose_name} is required'
+        if experienced_ae == YES and ae_count == 0:
+            msg = ('Participant has experienced an adverse event, '
+                   f'{self.ae_record_cls._meta.verbose_name} is required')
             raise forms.ValidationError(msg)
 
     class Meta:
@@ -31,8 +30,22 @@ class AdverseEventForm(SubjectModelFormMixin, forms.ModelForm):
         fields = '__all__'
 
 
-class AdverseEventRecordForm(SubjectModelFormMixin, forms.ModelForm):
+class AdverseEventRecordForm(MedDRAFormMixin, SubjectModelFormMixin, forms.ModelForm):
+
     form_validator_cls = AdverseEventRecordFormValidator
+
+    ae_number = forms.IntegerField(
+        label='AE number',
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}),
+        required=False)
+
+    def __init__(self, *args, **kwargs):
+        version = django_apps.get_app_config('edc_meddra').version
+        initial = kwargs.pop('initial', {})
+        initial['meddra_v'] = initial.get('meddra_v', version)
+        initial['ctcae_v'] = initial.get('ctcae_v', version)
+        kwargs['initial'] = initial
+        super().__init__(*args, **kwargs)
 
     def clean(self):
         cleaned_data = super(AdverseEventRecordForm, self).clean()
@@ -45,12 +58,12 @@ class AdverseEventRecordForm(SubjectModelFormMixin, forms.ModelForm):
             """
             if serious_event == YES and int(serious_ae) == 0:
                 msg = {'serious_event':
-                           'Please complete the serious adverse event table.'}
+                       'Please complete the serious adverse event table.'}
                 raise forms.ValidationError(msg)
             elif serious_event == NO and int(serious_ae) != 0:
                 msg = {'serious_event':
-                           'This is not a serious AE, please *DO NOT* complete the '
-                           'serious adverse event table.'}
+                       'This is not a serious AE, please *DO NOT* complete the'
+                       ' serious adverse event table.'}
                 raise forms.ValidationError(msg)
 
         special_interest_ae = cleaned_data.get('special_interest_ae')
@@ -62,15 +75,14 @@ class AdverseEventRecordForm(SubjectModelFormMixin, forms.ModelForm):
             """
             if special_interest_ae == YES and aesi and int(aesi) == 0:
                 msg = {'special_interest_ae':
-                           'Please complete the AEs of special interest table.'}
+                       'Please complete the AEs of special interest table.'}
                 raise forms.ValidationError(msg)
             elif special_interest_ae == NO and int(aesi) != 0:
                 msg = {'special_interest_ae':
-                           'This is not an AE of special interest, please *DO NOT* '
-                           'complete the AEs of special interest table.'}
+                       'This is not an AE of special interest, please *DO NOT* '
+                       'complete the AEs of special interest table.'}
                 raise forms.ValidationError(msg)
 
-
-class Meta:
-    model = AdverseEventRecord
-    fields = '__all__'
+    class Meta:
+        model = AdverseEventRecord
+        fields = '__all__'

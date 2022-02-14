@@ -16,6 +16,7 @@ git+https://github.com/botswana-harvard/edc-lab.git@develop#egg=edc_lab
 git+https://github.com/botswana-harvard/edc-label.git@develop#egg=edc_label
 git+https://github.com/botswana-harvard/edc-list-data.git@develop#egg=edc_list_data
 git+https://github.com/botswana-harvard/edc-locator.git@develop#egg=edc_locator
+git+https://github.com/botswana-harvard/edc-meddra.git@develop#egg=edc_meddra
 git+https://github.com/botswana-harvard/edc-metadata.git@develop#egg=edc_metadata
 git+https://github.com/botswana-harvard/edc-metadata-rules.git@develop#egg=edc_metadata_rules
 git+https://github.com/botswana-harvard/edc-model-admin.git@develop#egg=edc_model_admin
@@ -40,6 +41,7 @@ git+https://github.com/covid19-vaccine/esr21-metadata-rules.git@develop#esr21_me
 git+https://github.com/covid19-vaccine/esr21-prn.git@develop#egg=esr21_prn
 git+https://github.com/covid19-vaccine/esr21-reference.git@develop#esr21_reference
 git+https://github.com/covid19-vaccine/esr21-visit-schedule.git@develop#esr21_visit_schedule
+django-autocomplete-light
 django-countries
 setuptools~=57.4.0
 Django~=3.2.8

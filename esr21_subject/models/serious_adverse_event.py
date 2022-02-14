@@ -7,8 +7,6 @@ from edc_constants.choices import YES_NO
 
 from .list_models import SAECriteria
 from .model_mixins import CrfModelMixin
-from .adverse_event import AdverseEventRecord
-from django.core.exceptions import ValidationError
 
 
 class SeriousAdverseEventRecordManager(models.Manager):
@@ -28,13 +26,13 @@ class SeriousAdverseEvent(CrfModelMixin):
 
 
 class SeriousAdverseEventRecord(SiteModelMixin, BaseUuidModel):
+
     serious_adverse_event = models.ForeignKey(
         SeriousAdverseEvent,
         on_delete=models.PROTECT)
 
     ae_number = models.PositiveIntegerField(
         verbose_name='AE number',
-        null=True
     )
 
     sae_name = models.CharField(
@@ -63,8 +61,8 @@ class SeriousAdverseEventRecord(SiteModelMixin, BaseUuidModel):
 
     ae_sddat = models.DateField(
         verbose_name='Date of death',
-        null = True,
-        blank = True
+        null=True,
+        blank=True
     )
 
     ae_sautop = models.CharField(
@@ -252,26 +250,6 @@ class SeriousAdverseEventRecord(SiteModelMixin, BaseUuidModel):
         return (self.sae_name, self.start_date,) + self.serious_adverse_event.natural_key()
 
     natural_key.dependencies = ['esr21_subject.seriousadverseevent']
-
-    @property
-    def update_ae_number(self):
-        """Update AE number.
-        """
-        ae_number = 0
-        ae = AdverseEventRecord.objects.filter(
-            adverse_event__subject_visit__subject_identifier=self.serious_adverse_event.subject_visit.subject_identifier,
-            adverse_event__subject_visit__visit_code=self.serious_adverse_event.subject_visit.visit_code).order_by('created')
-        if ae:
-            last_ae = ae.last()
-            ae_number = last_ae.ae_number
-        else:
-            raise ValidationError("An SAE can not exist without an AE")
-        return ae_number
-
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.ae_number = self.update_ae_number
-        super().save(*args, **kwargs)
 
     class Meta:
         app_label = 'esr21_subject'
