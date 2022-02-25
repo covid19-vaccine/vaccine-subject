@@ -22,7 +22,7 @@ class EligibilityConfirmationManager(SearchSlugManager, models.Manager):
 
 
 class ScreeningEligibility(UniqueSubjectIdentifierModelMixin, SiteModelMixin,
-                        SearchSlugModelMixin, BaseUuidModel):
+                           SearchSlugModelMixin, BaseUuidModel):
 
     report_datetime = models.DateTimeField(
         verbose_name='Report Date and Time',
@@ -32,7 +32,7 @@ class ScreeningEligibility(UniqueSubjectIdentifierModelMixin, SiteModelMixin,
 
     substance_hypersensitivity = models.CharField(
         verbose_name=('Any hypersensitivity to the active substance or to any of the '
-                    'excipients?'),
+                      'excipients?'),
         choices=YES_NO,
         max_length=3,
         default=NO
@@ -40,7 +40,7 @@ class ScreeningEligibility(UniqueSubjectIdentifierModelMixin, SiteModelMixin,
 
     pregnancy_status = models.CharField(
         verbose_name=('Are you pregnant or nursing or do you plan to get pregnant in the next '
-                    '3 months?'),
+                      '3 months?'),
         max_length=3,
         choices=YES_NO,
         default=NO
@@ -49,7 +49,7 @@ class ScreeningEligibility(UniqueSubjectIdentifierModelMixin, SiteModelMixin,
     # ADDED QUESTIONS FROM THE DOC
     thrombosis_or_thrombocytopenia = models.CharField(
         verbose_name=('Does individuals have any risk factors for or a reported history of '
-                    'thrombosis and/or thrombocytopenia?'),
+                      'thrombosis and/or thrombocytopenia?'),
         max_length=3,
         choices=YES_NO,
         default=NO,
@@ -57,13 +57,12 @@ class ScreeningEligibility(UniqueSubjectIdentifierModelMixin, SiteModelMixin,
 
     clinical_bleeding = models.CharField(
         verbose_name=('Ever experienced clinically significant bleeding, or prior history '
-                    'of significant bleeding or bruising following intramuscular injections '
-                    'or venepuncture?'),
+                      'of significant bleeding or bruising following intramuscular injections '
+                      'or venepuncture?'),
         max_length=20,
         choices=YES_NO,
         default=NO,
-        help_text=('(eg, factor deficiency, coagulopathy, or '
-                'platelet disorder) '),
+        help_text=('(eg, factor deficiency, coagulopathy, or platelet disorder) '),
     )
 
     guillain_barre_syndrome = models.CharField(

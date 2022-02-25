@@ -34,6 +34,10 @@ class ScreeningEligibilityAdmin(ModelAdminMixin, admin.ModelAdmin):
             )}),
         audit_fieldset_tuple)
 
+    search_fields = ['subject_identifier']
+
+    list_display = ('subject_identifier', 'report_datetime',)
+
     radio_fields = {
         'substance_hypersensitivity': admin.VERTICAL,
         'pregnancy_status': admin.VERTICAL,

@@ -37,8 +37,6 @@ class DemographicDataAdmin(CrfModelAdminMixin, admin.ModelAdmin):
                     'marital_status': admin.VERTICAL,
                     'running_water': admin.VERTICAL, }
 
-
-
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({
             'show_save': True,

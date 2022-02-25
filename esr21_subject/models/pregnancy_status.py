@@ -11,6 +11,11 @@ from .model_mixins import CrfModelMixin
 
 class PregnancyStatus(CrfModelMixin):
 
+    primary_amenorrhea = models.CharField(
+        verbose_name='Does the participant have primary amenorrhea?',
+        choices=YES_NO,
+        max_length=3,)
+
     start_date_menstrual_period = models.DateField(
         verbose_name='Start Date of Last Menstrual Period (DD/MMM/YYYY)',
         validators=[date_not_future, ],

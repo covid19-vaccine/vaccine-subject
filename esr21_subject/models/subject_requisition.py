@@ -31,13 +31,14 @@ class Manager(VisitTrackingCrfModelManager, SearchSlugManager):
     pass
 
 
-class SubjectRequisition(
-    NonUniqueSubjectIdentifierFieldMixin,
-    RequisitionModelMixin, RequisitionStatusMixin, RequisitionIdentifierMixin,
-    VisitTrackingCrfModelMixin, SubjectScheduleCrfModelMixin,
-    RequiresConsentFieldsModelMixin, PreviousVisitModelMixin,
-    RequisitionReferenceModelMixin, UpdatesRequisitionMetadataModelMixin,
-    SearchSlugModelMixin, SenaiteRequisitionModelMixin, BaseUuidModel):
+class SubjectRequisition(NonUniqueSubjectIdentifierFieldMixin,
+                         RequisitionModelMixin, RequisitionStatusMixin,
+                         RequisitionIdentifierMixin, VisitTrackingCrfModelMixin,
+                         SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
+                         PreviousVisitModelMixin, RequisitionReferenceModelMixin,
+                         UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin,
+                         SenaiteRequisitionModelMixin, BaseUuidModel):
+
     lab_profile_name = 'esr21_subject'
 
     subject_visit = models.ForeignKey(SubjectVisit, on_delete=PROTECT)

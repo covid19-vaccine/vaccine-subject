@@ -33,7 +33,7 @@ class EligibilityConfirmationAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     readonly_fields = ('screening_identifier',)
 
-
+    list_display = ('screening_identifier', 'report_datetime', 'age_in_years',)
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({
