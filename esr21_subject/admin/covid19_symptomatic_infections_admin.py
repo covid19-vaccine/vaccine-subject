@@ -4,11 +4,11 @@ from edc_model_admin import audit_fieldset_tuple
 from ..admin_site import esr21_subject_admin
 from ..forms import Covid19SymptomaticInfectionsForm
 from ..models import Covid19SymptomaticInfections
-from .modeladmin_mixins import ModelAdminMixin
+from .modeladmin_mixins import CrfModelAdminMixin
 
 
 @admin.register(Covid19SymptomaticInfections, site=esr21_subject_admin)
-class Covid19SymptomaticInfectionsAdmin(ModelAdminMixin, admin.ModelAdmin):
+class Covid19SymptomaticInfectionsAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     form = Covid19SymptomaticInfectionsForm
 
@@ -33,7 +33,7 @@ class Covid19SymptomaticInfectionsAdmin(ModelAdminMixin, admin.ModelAdmin):
         'infection_status': admin.VERTICAL,
         'hospitalisation_visit': admin.VERTICAL, }
 
-    filter_horizontal = ("symptomatic_infections",)
+    filter_horizontal = ('symptomatic_infections',)
 
     def render_change_form(self, request, context, add=False, change=False,
                            form_url='', obj=None):

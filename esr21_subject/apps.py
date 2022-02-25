@@ -45,6 +45,7 @@ if settings.APP_NAME == 'esr21_subject':
     from edc_appointment.constants import COMPLETE_APPT
     from edc_constants.constants import FAILED_ELIGIBILITY
     from edc_facility.apps import AppConfig as BaseEdcFacilityAppConfig
+    from edc_meddra.apps import AppConfig as BaseEdcMeddraAppConfig
     from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
     from edc_protocol.apps import AppConfig as BaseEdcProtocolAppConfigs
     from edc_timepoint.apps import AppConfig as BaseEdcTimepointAppConfig
@@ -59,9 +60,9 @@ if settings.APP_NAME == 'esr21_subject':
         country = 'botswana'
         definitions = {
             '7-day clinic': dict(days=[MO, TU, WE, TH, FR, SA, SU],
-                                slots=[100, 100, 100, 100, 100, 100, 100]),
+                                 slots=[100, 100, 100, 100, 100, 100, 100]),
             '5-day clinic': dict(days=[MO, TU, WE, TH, FR],
-                                slots=[100, 100, 100, 100, 100])}
+                                 slots=[100, 100, 100, 100, 100])}
 
     class EdcProtocolAppConfig(BaseEdcProtocolAppConfigs):
         protocol = 'ADZ1222'
@@ -104,3 +105,6 @@ if settings.APP_NAME == 'esr21_subject':
         reason_field = {'esr21_subject.subjectvisit': 'reason'}
         create_on_reasons = [SCHEDULED, UNSCHEDULED, COMPLETED_PROTOCOL_VISIT]
         delete_on_reasons = [LOST_VISIT, MISSED_VISIT, FAILED_ELIGIBILITY]
+
+    class EdcMeddraAppConfig(BaseEdcMeddraAppConfig):
+        version = 24.1

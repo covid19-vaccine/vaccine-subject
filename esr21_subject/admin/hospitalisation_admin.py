@@ -34,8 +34,6 @@ class HospitalisationAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     filter_horizontal = ('covid_symptoms',)
 
-
-
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({
             'show_save': True,

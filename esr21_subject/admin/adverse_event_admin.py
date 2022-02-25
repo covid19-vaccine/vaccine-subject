@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
-from edc_model_admin import audit_fieldset_tuple
+from edc_model_admin import audit_fieldset_tuple, ModelAdminFormAutoNumberMixin
 from edc_model_admin.inlines import StackedInlineMixin
 
 from .modeladmin_mixins import CrfModelAdminMixin
@@ -10,7 +10,8 @@ from ..models import AdverseEvent, AdverseEventRecord
 from ..admin_site import esr21_subject_admin
 
 
-class AdverseEventRecordInlineAdmin(StackedInlineMixin, admin.StackedInline):
+class AdverseEventRecordInlineAdmin(StackedInlineMixin, ModelAdminFormAutoNumberMixin,
+                                    admin.StackedInline):
     model = AdverseEventRecord
     form = AdverseEventRecordForm
 
@@ -45,6 +46,7 @@ class AdverseEventRecordInlineAdmin(StackedInlineMixin, admin.StackedInline):
                 'discontn_dt',
                 'covid_related_ae',
                 'ae_rel',
+                'search_code',
                 'llt_code',
                 'llt_name',
                 'pt_code',
@@ -80,9 +82,17 @@ class AdverseEventRecordInlineAdmin(StackedInlineMixin, admin.StackedInline):
         'max_ctcae_grade': admin.VERTICAL,
     }
 
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj=obj, **kwargs)
+        formset.form = self.auto_number(formset.form)
+        return formset
+
 
 @admin.register(AdverseEvent, site=esr21_subject_admin)
 class AdverseEventAdmin(CrfModelAdminMixin, admin.ModelAdmin):
+
+    change_form_template = 'admin/esr21_subject/loader_change_form.html'
+
     form = AdverseEventForm
     inlines = [AdverseEventRecordInlineAdmin, ]
 
@@ -107,6 +117,11 @@ class AdverseEventAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     radio_fields = {'experienced_ae': admin.VERTICAL, }
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        if obj:
+            total_formset = obj.adverseeventrecord_set.count()
+            if total_formset > 0:
+                context.update({
+                    'total_formset': total_formset})
         context.update({
             'show_save': True,
             'show_save_and_continue': False,
@@ -114,3 +129,7 @@ class AdverseEventAdmin(CrfModelAdminMixin, admin.ModelAdmin):
             'show_delete': True
         })
         return super().render_change_form(request, context, add, change, form_url, obj)
+
+    class Media:
+        js = ('//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js',
+              'esr21_subject/js/autocomplete_light.js', )

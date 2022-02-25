@@ -16,6 +16,10 @@ class SpecialInterestAdverseEventRecordForm(SubjectModelFormMixin, forms.ModelFo
 
     form_validator_cls = SpecialInterestAERecordFormValidator
 
+    ae_number = forms.IntegerField(
+        label='AE number',
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
     def has_changed(self):
         return True
 

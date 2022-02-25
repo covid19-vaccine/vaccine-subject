@@ -62,8 +62,7 @@ class ScreeningEligibility(UniqueSubjectIdentifierModelMixin, SiteModelMixin,
         max_length=20,
         choices=YES_NO,
         default=NO,
-        help_text=('(eg, factor deficiency, coagulopathy, or '
-                   'platelet disorder) '),
+        help_text=('(eg, factor deficiency, coagulopathy, or platelet disorder) '),
     )
 
     guillain_barre_syndrome = models.CharField(

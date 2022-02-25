@@ -26,6 +26,7 @@ class PregnancyStatusAdmin(CrfModelAdminMixin, admin.ModelAdmin):
             'fields': (
                 'subject_visit',
                 'report_datetime',
+                'primary_amenorrhea',
                 'start_date_menstrual_period',
                 'expected_delivery',
                 'contraceptive_usage',
@@ -58,7 +59,8 @@ class PregnancyStatusAdmin(CrfModelAdminMixin, admin.ModelAdmin):
         }),
     )
 
-    radio_fields = {'contraceptive_usage': admin.VERTICAL,
+    radio_fields = {'primary_amenorrhea': admin.VERTICAL,
+                    'contraceptive_usage': admin.VERTICAL,
                     'surgically_sterilized': admin.VERTICAL,
                     'amenorrhea_history': admin.VERTICAL,
                     'post_menopausal_range': admin.VERTICAL,
@@ -87,8 +89,6 @@ class PregnancyStatusAdmin(CrfModelAdminMixin, admin.ModelAdmin):
             else:
                 if age(consent_obj.dob, visit_obj.report_datetime).years >= 50:
                     return 'above_50'
-
-
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({

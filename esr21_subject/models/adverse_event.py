@@ -5,6 +5,7 @@ from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import date_not_future
 from edc_base.sites import SiteModelMixin
 from edc_constants.choices import YES_NO
+from edc_meddra.model_mixin import MedDRAModelMixin
 from edc_protocol.validators import date_not_before_study_start
 
 from ..choices import ACTION_TAKEN, AE_GRADE, TREATMENT_RELATIONSHIP
@@ -34,7 +35,7 @@ class AdverseEvent(CrfModelMixin):
         verbose_name = 'Adverse Event'
 
 
-class AdverseEventRecord(SiteModelMixin, BaseUuidModel):
+class AdverseEventRecord(MedDRAModelMixin, SiteModelMixin, BaseUuidModel):
 
     adverse_event = models.ForeignKey(
         AdverseEvent,
