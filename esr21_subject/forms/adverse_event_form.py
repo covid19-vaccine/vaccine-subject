@@ -41,9 +41,10 @@ class AdverseEventRecordForm(MedDRAFormMixin, SubjectModelFormMixin, forms.Model
 
     def __init__(self, *args, **kwargs):
         version = django_apps.get_app_config('edc_meddra').version
+        ctcae_version = django_apps.get_app_config('edc_meddra').ctcae_version
         initial = kwargs.pop('initial', {})
         initial['meddra_v'] = initial.get('meddra_v', version)
-        initial['ctcae_v'] = initial.get('ctcae_v', version)
+        initial['ctcae_v'] = initial.get('ctcae_v', ctcae_version)
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
 
