@@ -7,6 +7,8 @@ from edc_appointment.models import Appointment
 from django.contrib.admin.sites import NotRegistered
 from .modeladmin_mixins import VersionControlMixin
 
+from ..forms import AppointmentForm
+
 try:
     edc_appointment_admin.unregister(Appointment)
 except NotRegistered:
@@ -15,6 +17,8 @@ except NotRegistered:
 
 @admin.register(Appointment, site=edc_appointment_admin)
 class AppointmentAdmin(BaseAppointmentAdmin, VersionControlMixin):
+
+    form = AppointmentForm
 
     enable_nav_sidebar = False
     add_form_template = "admin/esr21_subject/change_form.html"
@@ -47,7 +51,6 @@ class AppointmentAdmin(BaseAppointmentAdmin, VersionControlMixin):
 
         return super().change_view(
             request, object_id, form_url=form_url, extra_context=extra_context)
-
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({
