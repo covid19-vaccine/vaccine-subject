@@ -1,4 +1,5 @@
 from .adverse_event_form import AdverseEventForm, AdverseEventRecordForm
+from .appointment_form import AppointmentForm
 from .concomitant_medication_form import ConcomitantMedicationForm
 from .covid19_preventative_behaviours_form import Covid19PreventativeBehavioursForm
 from .covid19_results_form import Covid19ResultsForm
