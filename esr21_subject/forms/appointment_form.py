@@ -21,14 +21,15 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
 
             earliest_appt_date = (self.instance.timepoint_datetime -
                                   visit_definition.rlower).astimezone(
-                pytz.timezone('Africa/Gaborone'))
+                pytz.timezone('Africa/Gaborone')).date()
             latest_appt_date = (self.instance.timepoint_datetime +
                                 visit_definition.rupper).astimezone(
-                pytz.timezone('Africa/Gaborone'))
+                pytz.timezone('Africa/Gaborone')).date()
 
-            if ((cleaned_data.get('appt_datetime') < earliest_appt_date.replace(microsecond=0)
-                    or cleaned_data.get('appt_datetime') > latest_appt_date.replace(
-                            microsecond=0)) and self.instance.visit_code in ['1070']):
+            appt_date = cleaned_data.get('appt_datetime').date()
+
+            if ((appt_date < earliest_appt_date or appt_date > latest_appt_date)
+                    and self.instance.visit_code in ['1070']):
                 earliest_appt_date = earliest_appt_date.strftime('%Y-%m-%d')
                 latest_appt_date = latest_appt_date.strftime('%Y-%m-%d')
                 raise forms.ValidationError(
