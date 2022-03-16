@@ -22,6 +22,7 @@ from ..choices import GENDER_OTHER
 from ..choices import IDENTITY_TYPE
 from ..subject_identifier import SubjectIdentifier
 from .model_mixins import SearchSlugModelMixin
+from edc_consent.site_consents import site_consents
 
 
 class InformedConsentManager(ConsentManager, SearchSlugManager, models.Manager):
@@ -98,7 +99,7 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
         return (self.subject_identifier, self.version)
 
     def save(self, *args, **kwargs):
-        self.version = '1'
+        self.version = self.consent_version
         super().save(*args, **kwargs)
 
     def make_new_identifier(self):
@@ -114,7 +115,8 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
 
     @property
     def consent_version(self):
-        return self.version
+        consent = site_consents.get_consent(report_datetime=self.consent_datetime)
+        return consent.version
 
     class Meta(ConsentModelMixin.Meta):
         app_label = 'esr21_subject'
