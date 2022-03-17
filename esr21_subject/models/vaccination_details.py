@@ -3,11 +3,12 @@ from django_crypto_fields.fields import EncryptedCharField
 
 from edc_base.model_fields import OtherCharField
 from edc_base.model_validators import datetime_not_future, date_is_future
+from edc_base.model_managers import HistoricalRecords
 from edc_constants.choices import YES_NO, YES_NO_NA
+from edc_constants.constants import NOT_APPLICABLE
 
 from .model_mixins import CrfModelMixin
 from ..choices import VACCINATION_LOCATION, VACCINATION_DOSE
-from edc_constants.constants import NOT_APPLICABLE
 
 
 class VaccinationDetails(CrfModelMixin):
@@ -93,6 +94,8 @@ class VaccinationDetails(CrfModelMixin):
         validators=[date_is_future, ],
         blank=True,
         null=True)
+
+    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'

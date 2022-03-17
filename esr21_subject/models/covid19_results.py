@@ -1,4 +1,5 @@
 from django.db import models
+from edc_base.model_managers import HistoricalRecords
 from edc_constants.choices import POS_NEG
 from .model_mixins import CrfModelMixin
 
@@ -11,6 +12,8 @@ class Covid19Results(CrfModelMixin):
         max_length=15,
         null=True,
         blank=True)
+
+    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'

@@ -21,8 +21,8 @@ class EligibilityConfirmationManager(SearchSlugManager, models.Manager):
 
 
 class EligibilityConfirmation(NonUniqueSubjectIdentifierFieldMixin,
-                              SiteModelMixin,
-                              SearchSlugModelMixin, BaseUuidModel):
+                              SiteModelMixin, SearchSlugModelMixin, BaseUuidModel):
+
     identifier_cls = ScreeningIdentifier
 
     screening_identifier = models.CharField(
