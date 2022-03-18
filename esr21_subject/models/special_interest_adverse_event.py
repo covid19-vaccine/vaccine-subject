@@ -20,6 +20,8 @@ class SpecialInterestAdverseEvent(CrfModelMixin):
 
     """""Adverse Event of Special Interest (AESI)"""""
 
+    history = HistoricalRecords()
+
     class Meta:
         app_label = 'esr21_subject'
         verbose_name = 'Special Interest Adverse Event'
