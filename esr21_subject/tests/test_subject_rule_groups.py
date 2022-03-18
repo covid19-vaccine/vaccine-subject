@@ -49,16 +49,8 @@ class TestRuleGroups(TestCase):
             subject_identifier=self.subject_identifier)
 
         if screening_eligibility.is_eligible:
-            cohort = 'esr21'
-            onschedule_model = 'esr21_subject.onschedule'
-
-            self.put_on_schedule(f'{cohort}_enrol_schedule', onschedule_model=onschedule_model,
-                                 onschedule_datetime=screening_eligibility.created.replace(microsecond=0))
-
-            self.put_on_schedule(f'{cohort}_fu_schedule',
-                                 onschedule_model=onschedule_model,
-                                 onschedule_datetime=screening_eligibility.created.replace(microsecond=0))
-
+            self.put_subject_on_schedule(created=screening_eligibility.created,
+                                         subject_identifier=self.subject_identifier)
             self.subject_visit = mommy.make_recipe(
                 'esr21_subject.subjectvisit',
                 appointment=Appointment.objects.get(
@@ -105,6 +97,9 @@ class TestRuleGroups(TestCase):
             'esr21_subject.informedconsent',
             **consent_options)
 
+        self.put_subject_on_schedule(created=subject_consent.created,
+                                     subject_identifier=subject_consent.subject_identifier)
+
         mommy.make_recipe(
             'esr21_subject.screeningeligibility',
             subject_identifier=subject_consent.subject_identifier)
@@ -141,6 +136,9 @@ class TestRuleGroups(TestCase):
         subject_consent = mommy.make_recipe(
             'esr21_subject.informedconsent',
             **self.consent_options)
+
+        self.put_subject_on_schedule(created=subject_consent.created,
+                                     subject_identifier=subject_consent.subject_identifier)
 
         mommy.make_recipe(
             'esr21_subject.screeningeligibility',
@@ -187,8 +185,6 @@ class TestRuleGroups(TestCase):
 
         covid19 = CrfMetadata.objects.filter(subject_identifier=self.subject_identifier)
 
-        print(f'{covid19}')
-
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='esr21_subject.physicalexam',
@@ -196,10 +192,25 @@ class TestRuleGroups(TestCase):
                 visit_code='1000',
                 visit_code_sequence='0').entry_status, REQUIRED)
 
-    def put_on_schedule(self, schedule_name, onschedule_model, onschedule_datetime=None):
+    def put_subject_on_schedule(self, created, subject_identifier):
+        cohort = 'esr21'
+        onschedule_model = 'esr21_subject.onschedule'
+
+        self.put_on_schedule(f'{cohort}_enrol_schedule',
+                             onschedule_model=onschedule_model,
+                             onschedule_datetime=created.replace(microsecond=0),
+                             subject_identifier=subject_identifier)
+
+        self.put_on_schedule(f'{cohort}_fu_schedule',
+                             onschedule_model=onschedule_model,
+                             onschedule_datetime=created.replace(microsecond=0),
+                             subject_identifier=subject_identifier)
+
+    def put_on_schedule(self, schedule_name, onschedule_model,
+                        onschedule_datetime=None, subject_identifier=None):
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)
         schedule.put_on_schedule(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=subject_identifier,
             onschedule_datetime=onschedule_datetime,
             schedule_name=schedule_name)
