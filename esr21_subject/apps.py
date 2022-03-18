@@ -36,6 +36,7 @@ class AppConfig(DjangoAppConfig):
         'esr21_subject.vaccinationdetails': 2.1,
         'esr21_subject.vitalsigns': 2.1,
         'esr21_subject.screeningeligibility': 2.0,
+        'esr21_subject.vaccinationhistory': 1.0
         }
 
 

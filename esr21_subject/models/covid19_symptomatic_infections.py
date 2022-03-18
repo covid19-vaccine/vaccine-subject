@@ -8,6 +8,7 @@ from ..choices import INFECTION_STATUS
 
 
 class Covid19SymptomaticInfections(CrfModelMixin):
+
     symptomatic_experiences = models.CharField(
         verbose_name='Has the participant experienced any symptomatic'
                      ' infection(s)?',
