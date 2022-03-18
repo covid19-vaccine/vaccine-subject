@@ -27,9 +27,9 @@ class VisitFormValidator(BaseVisitFormValidator):
     def informed_consent_model_obj(self):
         subject_identifier = self.cleaned_data.get('appointment').subject_identifier
         try:
-            consent = self.informed_consent_model_cls.objects.get(
-                subject_identifier=subject_identifier,
-                version='1')
+            consent = self.informed_consent_model_cls.objects.filter(
+                subject_identifier=subject_identifier).order_by(
+                    '-consent_datetime').first()
         except self.informed_consent_model_cls.DoesNotExist:
             raise ValidationError(
                 'Please complete the Informed Consent form before proceeding.')

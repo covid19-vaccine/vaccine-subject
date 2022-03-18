@@ -7,7 +7,8 @@ from ..models import InformedConsent
 
 
 class InformedConsentForm(SiteModelFormMixin, FormValidatorMixin,
-                          ConsentModelFormMixin, forms.ModelForm):
+                          ConsentModelFormMixin,
+                          forms.ModelForm):
 
     form_validator_cls = InformedConsentFormValidator
 
