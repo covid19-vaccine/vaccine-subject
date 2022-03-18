@@ -20,6 +20,8 @@ class SeriousAdverseEventRecordManager(models.Manager):
 class SeriousAdverseEvent(CrfModelMixin):
     """""Serious Adverse Events (SAE)"""""
 
+    history = HistoricalRecords()
+
     class Meta:
         app_label = 'esr21_subject'
         verbose_name = 'Serious Adverse Event'

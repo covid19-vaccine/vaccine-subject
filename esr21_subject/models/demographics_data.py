@@ -1,6 +1,7 @@
 from django.db import models
 from django_countries.fields import CountryField
 from edc_base.model_fields import OtherCharField
+from edc_base.model_managers import HistoricalRecords
 from edc_constants.choices import YES_NO
 
 from ..maternal_choices import ETHNICITY, HIGHEST_EDUCATION
@@ -9,9 +10,6 @@ from ..choices import EMPLOYMENT_STATUS, SETTLEMENT_TYPE, MARITAL_STATUS
 
 
 class DemographicsData(CrfModelMixin):
-
-    # age_at_entry = models.IntegerField(
-    #     #     verbose_name='Age at study entry',)
 
     country = CountryField()
 
@@ -66,6 +64,8 @@ class DemographicsData(CrfModelMixin):
         verbose_name='Is there running water in domicile?',
         max_length=30,
         choices=YES_NO)
+
+    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'
