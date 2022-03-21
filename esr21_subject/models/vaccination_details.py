@@ -6,6 +6,7 @@ from edc_base.model_validators import datetime_not_future, date_is_future
 from edc_base.model_managers import HistoricalRecords
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
+from edc_protocol.validators import datetime_not_before_study_start
 
 from .model_mixins import CrfModelMixin
 from ..choices import VACCINATION_LOCATION, VACCINATION_DOSE
@@ -37,6 +38,7 @@ class VaccinationDetails(CrfModelMixin):
 
     vaccination_date = models.DateTimeField(
         verbose_name='Date and time the vaccination was administered?',
+        validators=[datetime_not_before_study_start, ],
         blank=True,
         null=True)
 
