@@ -418,6 +418,7 @@ YES_NO_OTHER = (
 VACCINATION_DOSE = (
     ('first_dose', 'First Dose'),
     ('second_dose', 'Second Dose'),
+    ('booster_dose', 'Booster Dose'),
     (NOT_APPLICABLE, 'Not applicable')
 )
 
