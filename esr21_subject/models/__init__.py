@@ -25,5 +25,6 @@ from .subject_requisition import SubjectRequisition
 from .subject_visit import SubjectVisit
 from .targeted_physical_examination import TargetedPhysicalExamination
 from .vaccination_details import VaccinationDetails
+from .vaccination_history import VaccinationHistory
 from .vital_signs import VitalSigns
 
