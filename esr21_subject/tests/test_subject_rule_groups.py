@@ -183,7 +183,8 @@ class TestRuleGroups(TestCase):
             subject_visit=self.subject_visit,
             covid_result=NEG)
 
-        covid19 = CrfMetadata.objects.filter(subject_identifier=self.subject_identifier)
+        covid19 = CrfMetadata.objects.filter(
+            subject_identifier=self.subject_identifier)
 
         self.assertEqual(
             CrfMetadata.objects.get(
