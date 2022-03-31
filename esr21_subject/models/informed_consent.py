@@ -1,10 +1,10 @@
 from django.core.validators import RegexValidator
 from django.db import models
 from django_crypto_fields.fields import EncryptedCharField
+from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_fields import OtherCharField
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
-from edc_base.model_validators.date import date_is_future
 from edc_base.sites import CurrentSiteManager
 from edc_base.sites.site_model_mixin import SiteModelMixin
 from edc_base.utils import get_utcnow
@@ -12,6 +12,7 @@ from edc_consent.field_mixins import IdentityFieldsMixin
 from edc_consent.field_mixins import PersonalFieldsMixin, VulnerabilityFieldsMixin
 from edc_consent.managers import ConsentManager
 from edc_consent.model_mixins import ConsentModelMixin
+from edc_consent.site_consents import site_consents
 from edc_consent.validators import eligible_if_yes
 from edc_constants.choices import YES_NO
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierModelMixin
@@ -51,6 +52,11 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
     screening_identifier = models.CharField(
         verbose_name='Screening identifier',
         max_length=50)
+
+    screening_failure = models.BooleanField(
+        verbose_name='screening failure',
+        default=False,
+    )
 
     consent_datetime = models.DateTimeField(
         verbose_name='Consent date and time',
@@ -98,7 +104,7 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
         return (self.subject_identifier, self.version)
 
     def save(self, *args, **kwargs):
-        self.version = '1'
+        self.version = self.consent_version
         super().save(*args, **kwargs)
 
     def make_new_identifier(self):
@@ -114,7 +120,8 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
 
     @property
     def consent_version(self):
-        return self.version
+        consent = site_consents.get_consent(report_datetime=self.consent_datetime)
+        return consent.version
 
     class Meta(ConsentModelMixin.Meta):
         app_label = 'esr21_subject'
@@ -123,4 +130,4 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
         unique_together = (
             ('subject_identifier', 'version'),
             ('subject_identifier', 'screening_identifier', 'version'),
-            ('first_name', 'dob', 'initials', 'version'))
+            ('screening_failure', 'first_name', 'dob', 'initials', 'version'))

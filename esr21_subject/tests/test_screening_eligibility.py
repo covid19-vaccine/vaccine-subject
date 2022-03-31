@@ -88,7 +88,7 @@ class TestScreeningEligibility(TestCase):
     """
 
     @tag('substance_hypersensitivity_no')
-    def test_substance_hypersensitivity_yes(self):
+    def test_substance_hypersensitivity_no(self):
         eligiblity = SecondEligibility(
             substance_hypersensitivity=NO,
             pregnancy_status=YES,
@@ -194,7 +194,7 @@ class TestScreeningEligibility(TestCase):
     """Participant age > 60 are in eligible"""
 
     @tag('covid_symptoms')
-    def test_thrombosis_or_thrombocytopenia(self):
+    def test_thrombosis_or_thrombocytopenia_covid_symptoms(self):
         eligiblity = SecondEligibility(
             substance_hypersensitivity=NO,
             pregnancy_status=NO,

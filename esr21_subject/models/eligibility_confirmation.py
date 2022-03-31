@@ -39,12 +39,13 @@ class EligibilityConfirmation(NonUniqueSubjectIdentifierFieldMixin,
 
     # TODO: Asked a question about what type of answer
     any_vaccine_receipt = models.CharField(
-        verbose_name=('Any receipt of, or planned receipt of any vaccines, medications, or '
-                      'investigational products indicated for the prevention of SARS-CoV-2 '
+        verbose_name=('Any receipt of, or planned receipt of any COVID-19 vaccine '
+                      'booster dose, or any medications, or investigational '
+                      'products indicated for the prevention of SARS-CoV-2 '
                       'infection or treatment of COVID-19?'),
-        help_text=('For study participants who become hospitalised with COVID-19, receipt of '
-                   'licensed treatment options and/or participation in investigational '
-                   'treatment studies is permitted.'),
+        help_text=('For study participants who become hospitalised with COVID-19,'
+                   ' receipt of licensed treatment options and/or participation'
+                   ' in investigational treatment studies is permitted.'),
         choices=YES_NO,
         max_length=3,
     )
@@ -62,7 +63,8 @@ class EligibilityConfirmation(NonUniqueSubjectIdentifierFieldMixin,
     received_vaccines = models.CharField(
         verbose_name='Has the participant received any vaccine other than '
                      'licensed influenza vaccines within 30 days prior to '
-                     'and after administration of study intervention?',
+                     'and after administration of study intervention (i.e the '
+                     'first, second and booster doses)?',
         max_length=10,
         choices=YES_NO,
         help_text='If Yes, participant is not eligible')

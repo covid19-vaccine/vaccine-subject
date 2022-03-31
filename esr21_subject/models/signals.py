@@ -1,14 +1,16 @@
 from django.apps import apps as django_apps
-from django.db.models.deletion import ProtectedError
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from edc_appointment.constants import COMPLETE_APPT, IN_PROGRESS_APPT, INCOMPLETE_APPT, NEW_APPT
+from edc_appointment.constants import COMPLETE_APPT
 from edc_appointment.models.appointment import Appointment
+from edc_base.utils import get_uuid
+from edc_registration.models import RegisteredSubject
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
+from ..models import InformedConsent
 from .adverse_event import AdverseEventRecord
 from .onschedule import OnSchedule
-from .screening_eligibility import ScreeningEligibility
 
 
 @receiver(post_save, weak=False, sender=AdverseEventRecord,
@@ -74,3 +76,27 @@ def is_subcohort_full():
             schedule_name='esr21_sub_enrol_schedule')
 
         return onschedule_subcohort.count() == 3000
+
+
+@receiver(post_save, weak=False, sender=InformedConsent, dispatch_uid="informed_consent_on_post_save")
+def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
+
+    if not raw and created:
+        subject_identifier = instance.subject_identifier
+        identity = instance.identity
+        try:
+            consent = InformedConsent.objects.filter(
+                Q(subject_identifier != subject_identifier) and
+                Q(identity=identity)).latest('-created')
+        except InformedConsent.DoesNotExist:
+            pass
+        else:
+            try:
+                registered_subject = RegisteredSubject.objects.get(identity=consent.identity)
+            except RegisteredSubject.DoesNotExist:
+                pass
+            else:
+                registered_subject.identity = None
+                registered_subject.identity_or_pk = get_uuid()
+                registered_subject.save()
+

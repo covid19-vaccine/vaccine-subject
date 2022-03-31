@@ -147,6 +147,9 @@ class TestRuleGroups(TestCase):
             'esr21_subject.informedconsent',
             **consent_options)
 
+        self.put_subject_on_schedule(created=subject_consent.created,
+                                     subject_identifier=subject_consent.subject_identifier)
+
         mommy.make_recipe(
             'esr21_subject.screeningeligibility',
             subject_identifier=subject_consent.subject_identifier)
@@ -209,6 +212,9 @@ class TestRuleGroups(TestCase):
         subject_consent = mommy.make_recipe(
             'esr21_subject.informedconsent',
             **self.consent_options)
+
+        self.put_subject_on_schedule(created=subject_consent.created,
+                                     subject_identifier=subject_consent.subject_identifier)
 
         mommy.make_recipe(
             'esr21_subject.screeningeligibility',
@@ -365,7 +371,6 @@ class TestRuleGroups(TestCase):
             'esr21_subject.covid19results',
             subject_visit=self.subject_visit,
             covid_result=NEG)
-
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='esr21_subject.physicalexam',
@@ -422,7 +427,6 @@ class TestRuleGroups(TestCase):
             subject_identifier=self.subject_identifier)
 
         screening_eligibility.symptomatic_infections_experiences = NO
-
         screening_eligibility.save()
 
         self.subject_visit.save()
