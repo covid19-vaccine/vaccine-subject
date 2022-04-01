@@ -1,14 +1,13 @@
 from django.apps import apps as django_apps
-from django.db.models.deletion import ProtectedError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from edc_appointment.constants import COMPLETE_APPT, IN_PROGRESS_APPT, INCOMPLETE_APPT, NEW_APPT
+from edc_appointment.constants import COMPLETE_APPT
 from edc_appointment.models.appointment import Appointment
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
 from .adverse_event import AdverseEventRecord
 from .onschedule import OnSchedule
-from .screening_eligibility import ScreeningEligibility
+from .vaccination_history import VaccinationHistory
 
 
 @receiver(post_save, weak=False, sender=AdverseEventRecord,
@@ -57,6 +56,25 @@ def appointment_on_post_save(sender, instance, raw, created, **kwargs):
                 latest_offschedule.save()
 
 
+@receiver(post_save, weak=False, sender=VaccinationHistory,
+          dispatch_uid='vaccination_history_on_post_save')
+def vaccination_history_on_post_save(sender, instance, raw, created, **kwargs):
+    if not raw:
+        if created:
+            if instance.dose_quantity == '2':
+                put_on_schedule(
+                    'esr21_booster_schedule',
+                    'esr21_subject.onschedule',
+                    instance=instance,
+                    onschedule_datetime=instance.created.replace(microsecond=0))
+        else:
+            if instance.dose_quantity == '2':
+                refresh_schedule(
+                    'esr21_booster_schedule',
+                    'esr21_subject.onschedule',
+                    instance=instance)
+
+
 def put_on_schedule(schedule_name, onschedule_model, instance=None, onschedule_datetime=None):
 
     if instance:
@@ -67,6 +85,15 @@ def put_on_schedule(schedule_name, onschedule_model, instance=None, onschedule_d
             subject_identifier=instance.subject_identifier,
             onschedule_datetime=onschedule_datetime,
             schedule_name=schedule_name)
+
+
+def refresh_schedule(schedule_name, onschedule_model, instance=None):
+    if instance:
+        _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+                    onschedule_model=onschedule_model,
+                    name=schedule_name)
+        schedule.refresh_schedule(
+            subject_identifier=instance.subject_identifier)
 
 
 def is_subcohort_full():

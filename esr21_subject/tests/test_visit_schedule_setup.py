@@ -1,11 +1,11 @@
 from django.test import TestCase, tag
 from edc_appointment.models import Appointment
 from edc_base.utils import get_utcnow
-from edc_constants.constants import YES
+from edc_constants.constants import YES, NO
 from edc_facility.import_holidays import import_holidays
 from edc_visit_tracking.constants import SCHEDULED
 from model_mommy import mommy
-from ..models import OnSchedule, OnScheduleIll
+from ..models import OnSchedule, OnScheduleIll, ScreeningEligibility
 from edc_appointment.constants import COMPLETE_APPT
 
 
@@ -29,10 +29,27 @@ class TestVisitScheduleSetup(TestCase):
             'esr21_subject.informedconsent',
             subject_identifier='123-9876')
 
-        screening_eligibility = mommy.make_recipe(
+        mommy.make_recipe(
             'esr21_subject.screeningeligibility',
             subject_identifier=consent.subject_identifier,
             is_eligible=True)
+
+        self.subject_identifier = self.consent.subject_identifier
+
+        screening_eligibility = ScreeningEligibility.objects.get(
+            subject_identifier=self.subject_identifier)
+
+        if screening_eligibility.is_eligible:
+            cohort = 'esr21'
+            onschedule_model = 'esr21_subject.onschedule'
+
+            self.put_on_schedule(f'{cohort}_enrol_schedule',
+                                 onschedule_model=onschedule_model,
+                                 onschedule_datetime=screening_eligibility.created.replace(microsecond=0))
+
+            self.put_on_schedule(f'{cohort}_fu_schedule',
+                                 onschedule_model=onschedule_model,
+                                 onschedule_datetime=screening_eligibility.created.replace(microsecond=0))
 
         self.assertEqual(OnSchedule.objects.filter(
             subject_identifier=screening_eligibility.subject_identifier,
