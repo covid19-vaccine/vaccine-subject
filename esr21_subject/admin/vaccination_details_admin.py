@@ -26,6 +26,7 @@ class VaccinationDetailsAdmin(CrfModelAdminMixin, admin.ModelAdmin):
                 'admin_per_protocol',
                 'reason_not_per_protocol',
                 'lot_number',
+                'kit_serial',
                 'expiry_date',
                 'provider_name',
                 'part_supervised',
