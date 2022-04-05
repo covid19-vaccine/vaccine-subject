@@ -11,7 +11,7 @@ from model_mommy import mommy
 from ..models import OnSchedule
 
 
-@tag('booster')
+@tag('dose2')
 class TestBoosterScheduleSetup(TestCase):
 
     databases = '__all__'
@@ -36,14 +36,14 @@ class TestBoosterScheduleSetup(TestCase):
             'esr21_subject.vaccinationhistory',
             subject_identifier=self.consent.subject_identifier,
             received_vaccine=YES,
-            dose_quantity='2')
+            dose_quantity='1')
 
-    def test_booster_dose_onschedule(self):
+    def test_dose2_onschedule(self):
         self.assertEqual(OnSchedule.objects.filter(
             subject_identifier=self.consent.subject_identifier,
-            schedule_name='esr21_booster_schedule').count(), 1)
+            schedule_name='esr21_fu_schedule_v3').count(), 1)
 
-    def test_booster_dose_not_onschedule(self):
+    def test_dose2_not_onschedule(self):
         consent = mommy.make_recipe(
             'esr21_subject.informedconsent',
             subject_identifier='123-9872')
@@ -61,7 +61,7 @@ class TestBoosterScheduleSetup(TestCase):
 
         self.assertEqual(OnSchedule.objects.filter(
             subject_identifier=consent.subject_identifier,
-            schedule_name='esr21_booster_schedule').count(), 0)
+            schedule_name='esr21_fu_schedule_v3').count(), 0)
 
         consent = mommy.make_recipe(
             'esr21_subject.informedconsent',
@@ -76,29 +76,29 @@ class TestBoosterScheduleSetup(TestCase):
             'esr21_subject.vaccinationhistory',
             subject_identifier=consent.subject_identifier,
             received_vaccine=YES,
-            dose_quantity=1)
+            dose_quantity='2')
 
         self.assertEqual(OnSchedule.objects.filter(
             subject_identifier=consent.subject_identifier,
-            schedule_name='esr21_booster_schedule').count(), 0)
+            schedule_name='esr21_fu_schedule_v3').count(), 0)
 
-    def test_booster_appointments_created(self):
-        """Assert that four appointments were created"""
-
+    def test_dose2_appointments_created(self):
+        """Assert that two appointments were created"""
+        import pdb;pdb.set_trace()
         self.assertEqual(Appointment.objects.filter(
-            subject_identifier=self.consent.subject_identifier).count(), 4)
+            subject_identifier=self.consent.subject_identifier).count(), 2)
 
-    def test_metadata_creation_booster(self):
+    def test_dose2_metadata_creation(self):
 
-        appointment_170 = Appointment.objects.get(
+        appointment_1070 = Appointment.objects.get(
             subject_identifier=self.consent.subject_identifier,
-            visit_code='1170')
+            visit_code='1070')
 
         mommy.make_recipe(
             'esr21_subject.subjectvisit',
             subject_identifier=self.consent.subject_identifier,
             report_datetime=get_utcnow(),
-            appointment=appointment_170)
+            appointment=appointment_1070)
 
         entry_required = ['vaccinationdetails', 'physicalexam', 'vitalsigns',
                           'pregnancystatus']
@@ -108,4 +108,4 @@ class TestBoosterScheduleSetup(TestCase):
                 CrfMetadata.objects.get(
                     model=f'esr21_subject.{required}',
                     subject_identifier=self.consent.subject_identifier,
-                    visit_code='1170').entry_status, REQUIRED)
+                    visit_code='1070').entry_status, REQUIRED)

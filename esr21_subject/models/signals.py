@@ -7,7 +7,6 @@ from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
 from .adverse_event import AdverseEventRecord
 from .onschedule import OnSchedule
-from .vaccination_history import VaccinationHistory
 
 
 @receiver(post_save, weak=False, sender=AdverseEventRecord,
@@ -54,25 +53,6 @@ def appointment_on_post_save(sender, instance, raw, created, **kwargs):
             else:
                 latest_offschedule.schedule_name = instance.schedule_name
                 latest_offschedule.save()
-
-
-@receiver(post_save, weak=False, sender=VaccinationHistory,
-          dispatch_uid='vaccination_history_on_post_save')
-def vaccination_history_on_post_save(sender, instance, raw, created, **kwargs):
-    if not raw:
-        if created:
-            if instance.dose_quantity == '2':
-                put_on_schedule(
-                    'esr21_booster_schedule',
-                    'esr21_subject.onschedule',
-                    instance=instance,
-                    onschedule_datetime=instance.created.replace(microsecond=0))
-        else:
-            if instance.dose_quantity == '2':
-                refresh_schedule(
-                    'esr21_booster_schedule',
-                    'esr21_subject.onschedule',
-                    instance=instance)
 
 
 def put_on_schedule(schedule_name, onschedule_model, instance=None, onschedule_datetime=None):
