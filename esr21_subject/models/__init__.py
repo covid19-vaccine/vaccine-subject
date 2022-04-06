@@ -19,6 +19,7 @@ from .rapid_hiv_testing import RapidHIVTesting
 from .sample_collection import SampleCollection
 from .screening_eligibility import ScreeningEligibility
 from .serious_adverse_event import SeriousAdverseEvent, SeriousAdverseEventRecord
+from .signals import *
 from .special_interest_adverse_event import SpecialInterestAdverseEvent
 from .special_interest_adverse_event import SpecialInterestAdverseEventRecord
 from .subject_requisition import SubjectRequisition
@@ -26,4 +27,3 @@ from .subject_visit import SubjectVisit
 from .targeted_physical_examination import TargetedPhysicalExamination
 from .vaccination_details import VaccinationDetails
 from .vital_signs import VitalSigns
-

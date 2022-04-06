@@ -7,6 +7,7 @@ from edc_visit_tracking.constants import SCHEDULED
 from model_mommy import mommy
 from ..models import OnSchedule, OnScheduleIll
 from edc_appointment.constants import COMPLETE_APPT
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
 
 @tag('vs')
@@ -28,6 +29,9 @@ class TestVisitScheduleSetup(TestCase):
         consent = mommy.make_recipe(
             'esr21_subject.informedconsent',
             subject_identifier='123-9876')
+
+        self.put_subject_on_schedule(consent.created,
+                                     consent.subject_identifier)
 
         screening_eligibility = mommy.make_recipe(
             'esr21_subject.screeningeligibility',
@@ -69,11 +73,14 @@ class TestVisitScheduleSetup(TestCase):
         """
 
         mommy.make_recipe(
-            'esr21_subject.eligibilityconfirmation',)
+            'esr21_subject.eligibilityconfirmation')
 
         consent = mommy.make_recipe(
             'esr21_subject.informedconsent',
             subject_identifier='123-9877')
+
+        self.put_subject_on_schedule(consent.created,
+                                     consent.subject_identifier)
 
         screening_eligibility = mommy.make_recipe(
             'esr21_subject.screeningeligibility',
@@ -113,6 +120,9 @@ class TestVisitScheduleSetup(TestCase):
         consent = mommy.make_recipe(
             'esr21_subject.informedconsent',
             subject_identifier='123-9877')
+
+        self.put_subject_on_schedule(consent.created,
+                                     consent.subject_identifier)
 
         screening_eligibility = mommy.make_recipe(
             'esr21_subject.screeningeligibility',
@@ -172,6 +182,9 @@ class TestVisitScheduleSetup(TestCase):
             'esr21_subject.screeningeligibility',
             subject_identifier=consent.subject_identifier,
             is_eligible=True)
+
+        self.put_subject_on_schedule(consent.created,
+                                     consent.subject_identifier)
 
         mommy.make_recipe(
             'esr21_subject.subjectvisit',
@@ -241,6 +254,9 @@ class TestVisitScheduleSetup(TestCase):
             subject_identifier=consent.subject_identifier,
             is_eligible=True)
 
+        self.put_subject_on_schedule(consent.created,
+                                     consent.subject_identifier)
+
         mommy.make_recipe(
             'esr21_subject.subjectvisit',
             appointment=Appointment.objects.get(
@@ -282,3 +298,26 @@ class TestVisitScheduleSetup(TestCase):
         self.assertNotEqual(OnScheduleIll.objects.filter(
             subject_identifier=screening_eligibility.subject_identifier,
             schedule_name='esr21_illness2_schedule').count(), 1)
+
+    def put_subject_on_schedule(self, created, subject_identifier):
+        cohort = 'esr21'
+        onschedule_model = 'esr21_subject.onschedule'
+
+        self.put_on_schedule(f'{cohort}_enrol_schedule',
+                             onschedule_model=onschedule_model,
+                             onschedule_datetime=created.replace(microsecond=0),
+                             subject_identifier=subject_identifier)
+
+        self.put_on_schedule(f'{cohort}_fu_schedule',
+                             onschedule_model=onschedule_model,
+                             onschedule_datetime=created.replace(microsecond=0),
+                             subject_identifier=subject_identifier)
+
+    def put_on_schedule(self, schedule_name, onschedule_model,
+                        onschedule_datetime=None, subject_identifier=None):
+        _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+            onschedule_model=onschedule_model, name=schedule_name)
+        schedule.put_on_schedule(
+            subject_identifier=subject_identifier,
+            onschedule_datetime=onschedule_datetime,
+            schedule_name=schedule_name)
