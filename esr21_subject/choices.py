@@ -91,26 +91,6 @@ CONCOMITANT_ROUTE = (
     (OTHER, 'Other'),
 )
 
-COVID_PRODUCT_NAME = (
-    ('moderna', 'Moderna'),
-    ('pfizer', 'Pfizer-BioNTech'),
-    ('astrazaneca', 'AstraZaneca'),
-    ('janssen', 'Janssen'),
-    ('novavax', 'Novavax'),
-    (OTHER, 'Other'),
-)
-
-COVID_INFO_SOURCE = (
-    ('documented_evidence',
-     'Documented evidence (Vaccine card/Vaccine passport/Facility based record)'),
-    ('recall', 'Recall'),
-)
-
-DOSE_QUANTITY = (
-    ('1', '1'),
-    ('2', '2'),
-)
-
 EMPLOYMENT_STATUS = (
     ('formal-wage_employment_part_time', 'Formal wage employment (Part-time)'),
     ('formal_wage_employment-full_time)',
@@ -240,8 +220,7 @@ POS_NEG_IND = (
 
 PREGNANCY_TEST_TYPE = (
     ('urine', 'Urine'),
-    ('hcg', 'HCG'),
-)
+    ('hcg', 'HCG'),)
 
 REASON = (
     ('not_collected', 'Not collected'),
@@ -416,9 +395,8 @@ YES_NO_OTHER = (
     (OTHER, 'Other'))
 
 VACCINATION_DOSE = (
-    ('first_dose', 'First Dose'),
-    ('second_dose', 'Second Dose'),
-    ('booster_dose', 'Booster Dose'),
+    ("first_dose", "First Dose"),
+    ("second_dose", "Second Dose"),
     (NOT_APPLICABLE, 'Not applicable')
 )
 
@@ -429,6 +407,8 @@ HUBS = (
     ('greater_selibe_phikwe', 'Greater Selibe Phikwe'),
     ('serowe_or_palapye', 'Serowe/Palapye')
 )
+
+
 
 # TODO: Add options to the AE Form
 
