@@ -101,6 +101,7 @@ class TestVisitScheduleSetup(TestCase):
             subject_identifier=consent.subject_identifier,
             schedule_name='esr21_sub_boost_schedule').count(), 1)
 
+    @tag('vsxxx')
     def test_maincohort_appts_created(self):
         """Assert that four appointments were created"""
         cohort = 'esr21'
@@ -125,9 +126,9 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(Appointment.objects.get(
             subject_identifier=self.subject_identifier,
-            schedule_name='esr21_fu_schedule3',
-            visit_code='1070').timepoint_datetime,
-            (get_utcnow() + relativedelta(days=70)).replace(microsecond=0))
+            schedule_name='esr21_boost_schedule',
+            visit_code='1170').timepoint_datetime,
+            (get_utcnow() + relativedelta(days=170)).replace(microsecond=0))
 
 #     @tag('vs1')
 #     def test_illness_onschedule(self):
