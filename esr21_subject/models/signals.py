@@ -1,4 +1,5 @@
 from django.apps import apps as django_apps
+from django.contrib.sites.models import Site
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -8,15 +9,17 @@ from edc_base.utils import get_uuid
 from edc_registration.models import RegisteredSubject
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
-from ..models import InformedConsent
 from .adverse_event import AdverseEventRecord
 from .onschedule import OnSchedule
+from .vaccination_details import VaccinationDetails
+from ..models import InformedConsent
 
 
 @receiver(post_save, weak=False, sender=AdverseEventRecord,
           dispatch_uid="metadata_update_on_post_save")
 def metadata_update_on_post_save(sender, instance, raw, created, using,
-                                 update_fields, **kwargs):
+        update_fields, **kwargs
+):
     """Update the meta data record on post save of a CRF model.
     """
 
@@ -36,15 +39,17 @@ def metadata_update_on_post_save(sender, instance, raw, created, using,
                 instance.adverse_event.run_metadata_rules_for_crf()
 
 
-@receiver(post_save, weak=False, sender=Appointment, dispatch_uid='appointment_on_post_save')
+@receiver(post_save, weak=False, sender=Appointment,
+          dispatch_uid='appointment_on_post_save')
 def appointment_on_post_save(sender, instance, raw, created, **kwargs):
-
     if not raw:
-        if (instance.visit_code == '2028' and instance.schedule_name == 'esr21_illness_schedule'
+        if (
+                instance.visit_code == '2028' and instance.schedule_name == 'esr21_illness_schedule'
                 and instance.appt_status == COMPLETE_APPT):
 
             _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
-                onschedule_model='esr21_subject.onscheduleill', name=instance.schedule_name)
+                onschedule_model='esr21_subject.onscheduleill',
+                name=instance.schedule_name)
 
             schedule.take_off_schedule(subject_identifier=instance.subject_identifier)
 
@@ -59,8 +64,9 @@ def appointment_on_post_save(sender, instance, raw, created, **kwargs):
                 latest_offschedule.save()
 
 
-def put_on_schedule(schedule_name, onschedule_model, instance=None, onschedule_datetime=None):
-
+def put_on_schedule(schedule_name, onschedule_model, instance=None,
+        onschedule_datetime=None
+):
     if instance:
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)
@@ -72,15 +78,15 @@ def put_on_schedule(schedule_name, onschedule_model, instance=None, onschedule_d
 
 
 def is_subcohort_full():
-        onschedule_subcohort = OnSchedule.objects.filter(
-            schedule_name='esr21_sub_enrol_schedule')
+    onschedule_subcohort = OnSchedule.objects.filter(
+        schedule_name='esr21_sub_enrol_schedule')
 
-        return onschedule_subcohort.count() == 3000
+    return onschedule_subcohort.count() == 3000
 
 
-@receiver(post_save, weak=False, sender=InformedConsent, dispatch_uid="informed_consent_on_post_save")
+@receiver(post_save, weak=False, sender=InformedConsent,
+          dispatch_uid="informed_consent_on_post_save")
 def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
-
     if not raw and created:
         subject_identifier = instance.subject_identifier
         identity = instance.identity
@@ -92,7 +98,8 @@ def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
             pass
         else:
             try:
-                registered_subject = RegisteredSubject.objects.get(identity=consent.identity)
+                registered_subject = RegisteredSubject.objects.get(
+                    identity=consent.identity)
             except RegisteredSubject.DoesNotExist:
                 pass
             else:
@@ -100,3 +107,33 @@ def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
                 registered_subject.identity_or_pk = get_uuid()
                 registered_subject.save()
 
+
+@receiver(post_save, weak=False, sender=VaccinationDetails,
+          dispatch_uid="vaccination_details_on_post_save")
+def vaccination_details_on_post_save(sender, instance, raw, created, **kwargs):
+    if not raw and created:
+        drug_accountability_model = 'esr21_pharmacy.drugaccountabilitylog'
+        drug_accountability_cls = django_apps.get_model(drug_accountability_model)
+        site_name = sites_name(instance.site_id)
+        try:
+            drug_batch = drug_accountability_cls.objects.get(
+                lot_number=instance.lot_number, injection_site=site_name)
+        except drug_accountability_cls.DoesNotExist:
+            raise LotNumberError(
+                f'Lot Number {instance.lot_number} does not exist, Please check enter '
+                f'an existing lot number')
+        else:
+            drug_batch.balance = drug_batch.balance - 0.1
+            drug_batch.save_base(raw=True)
+
+
+def sites_name(site_id):
+    sites = Site.objects.all()
+    for site in sites:
+        if site.id == site_id:
+            name = site.name.split('-')[1]
+            return name
+
+
+class LotNumberError(Exception):
+    pass
