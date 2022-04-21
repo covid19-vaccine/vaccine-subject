@@ -1,12 +1,12 @@
 from django.test import TestCase, tag
-from edc_appointment.models import Appointment
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO, FEMALE
 from edc_facility.import_holidays import import_holidays
-from edc_metadata.models import CrfMetadata
 from edc_metadata.constants import REQUIRED
+from edc_metadata.models import CrfMetadata
 from model_mommy import mommy
 
+from edc_appointment.models import Appointment
 
 from ..models import OnSchedule
 
@@ -84,7 +84,6 @@ class TestBoosterScheduleSetup(TestCase):
 
     def test_dose2_appointments_created(self):
         """Assert that two appointments were created"""
-        import pdb;pdb.set_trace()
         self.assertEqual(Appointment.objects.filter(
             subject_identifier=self.consent.subject_identifier).count(), 2)
 
