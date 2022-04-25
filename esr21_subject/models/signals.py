@@ -108,23 +108,23 @@ def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
                 registered_subject.save()
 
 
-@receiver(post_save, weak=False, sender=VaccinationDetails,
-          dispatch_uid="vaccination_details_on_post_save")
-def vaccination_details_on_post_save(sender, instance, raw, created, **kwargs):
-    if not raw and created:
-        drug_accountability_model = 'esr21_pharmacy.drugaccountabilitylog'
-        drug_accountability_cls = django_apps.get_model(drug_accountability_model)
-        site_name = sites_name(instance.site_id)
-        try:
-            drug_batch = drug_accountability_cls.objects.get(
-                lot_number=instance.lot_number, injection_site=site_name)
-        except drug_accountability_cls.DoesNotExist:
-            raise LotNumberError(
-                f'Lot Number {instance.lot_number} does not exist, Please check enter '
-                f'an existing lot number')
-        else:
-            drug_batch.balance = drug_batch.balance - 0.1
-            drug_batch.save_base(raw=True)
+# @receiver(post_save, weak=False, sender=VaccinationDetails,
+#           dispatch_uid="vaccination_details_on_post_save")
+# def vaccination_details_on_post_save(sender, instance, raw, created, **kwargs):
+#     if not raw and created:
+#         drug_accountability_model = 'esr21_pharmacy.drugaccountabilitylog'
+#         drug_accountability_cls = django_apps.get_model(drug_accountability_model)
+#         site_name = sites_name(instance.site_id)
+#         try:
+#             drug_batch = drug_accountability_cls.objects.get(
+#                 lot_number=instance.lot_number, injection_site=site_name)
+#         except drug_accountability_cls.DoesNotExist:
+#             raise LotNumberError(
+#                 f'Lot Number {instance.lot_number} does not exist, Please check enter '
+#                 f'an existing lot number')
+#         else:
+#             drug_batch.balance = drug_batch.balance - 0.1
+#             drug_batch.save_base(raw=True)
 
 
 def sites_name(site_id):
