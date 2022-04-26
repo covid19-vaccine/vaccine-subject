@@ -68,12 +68,6 @@ class VaccinationDetails(CrfModelMixin):
         blank=True,
         null=True,)
 
-    # kit_serial = models.CharField(
-    #     verbose_name='Kit Serial number',
-    #     max_length=30,
-    #     blank=True,
-    #     null=True,)
-
     expiry_date = models.DateField(
         verbose_name='Vaccination expiry date',
         blank=True,
