@@ -6,7 +6,7 @@ from edc_appointment.constants import COMPLETE_APPT
 from edc_appointment.models.appointment import Appointment
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
-from . import VaccinationDetails
+from .vaccination_details import VaccinationDetails
 from .adverse_event import AdverseEventRecord
 from .onschedule import OnSchedule
 
