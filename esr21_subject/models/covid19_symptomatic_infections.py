@@ -1,5 +1,6 @@
 from django.db import models
 from edc_base.model_fields import OtherCharField
+from edc_base.model_managers import HistoricalRecords
 from edc_constants.choices import YES_NO
 
 from .list_models import SymptomaticInfections
@@ -8,7 +9,6 @@ from ..choices import INFECTION_STATUS
 
 
 class Covid19SymptomaticInfections(CrfModelMixin):
-
     symptomatic_experiences = models.CharField(
         verbose_name='Has the participant experienced any symptomatic'
                      ' infection(s)?',
@@ -42,6 +42,8 @@ class Covid19SymptomaticInfections(CrfModelMixin):
         verbose_name='Date of hospitalisation:',
         blank=True,
         null=True, )
+
+    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'

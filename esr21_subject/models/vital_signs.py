@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from edc_base.model_managers import HistoricalRecords
 from edc_base.model_validators.date import datetime_not_future
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
@@ -73,6 +74,8 @@ class VitalSigns(CrfModelMixin):
         verbose_name='Comment',
         blank=True,
         null=True)
+
+    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'

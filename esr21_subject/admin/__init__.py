@@ -21,6 +21,5 @@ from .subject_requisition_admin import SubjectRequisitionAdmin
 from .subject_visit_admin import SubjectVisitAdmin
 from .targeted_physical_examination_admin import TargetedPhysicalExaminationAdmin
 from .vaccination_details_admin import VaccinationDetailsAdmin
-from .vaccination_history_admin import VaccinationHistoryAdmin
 from .vital_signs_admin import VitalSignsAdmin
 

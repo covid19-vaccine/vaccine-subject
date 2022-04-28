@@ -20,6 +20,8 @@ class SeriousAdverseEventRecordManager(models.Manager):
 class SeriousAdverseEvent(CrfModelMixin):
     """""Serious Adverse Events (SAE)"""""
 
+    history = HistoricalRecords()
+
     class Meta:
         app_label = 'esr21_subject'
         verbose_name = 'Serious Adverse Event'
@@ -203,16 +205,6 @@ class SeriousAdverseEventRecord(SiteModelMixin, BaseUuidModel):
         null=True,
         blank=True)
 
-    # incapacity_specify = OtherCharField(
-    #     verbose_name='Specify persistent or significant disability/incapacity',
-    #     max_length=100)
-
-    # medical_event_other = OtherCharField(
-    #     verbose_name='If yes, specify important serious event',
-    #     null=True,
-    #     blank=True,
-    #     max_length=100)
-
     rationale = models.CharField(
         verbose_name=('Investigator\'s rationale for Study Treatment being '
                       'Related to the events'),
@@ -253,5 +245,6 @@ class SeriousAdverseEventRecord(SiteModelMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'esr21_subject'
-        unique_together = ('serious_adverse_event', 'start_date', 'date_aware_of')
+        unique_together = ('serious_adverse_event', 'ae_number', 'start_date',
+                           'date_aware_of')
         verbose_name = 'Serious Adverse Event Record'

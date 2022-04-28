@@ -1,10 +1,12 @@
 from django.apps import apps as django_apps
+from django.contrib.sites.models import Site
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_appointment.constants import COMPLETE_APPT
 from edc_appointment.models.appointment import Appointment
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
+from .vaccination_details import VaccinationDetails
 from .adverse_event import AdverseEventRecord
 from .onschedule import OnSchedule
 
@@ -55,8 +57,39 @@ def appointment_on_post_save(sender, instance, raw, created, **kwargs):
                 latest_offschedule.save()
 
 
-def put_on_schedule(schedule_name, onschedule_model, instance=None, onschedule_datetime=None):
+@receiver(post_save, weak=False, sender=VaccinationDetails,
+          dispatch_uid="vaccination_details_on_post_save")
+def vaccination_details_on_post_save(sender, instance, raw, created, **kwargs):
+    if not raw and created:
+        drug_accountability_model = 'esr21_pharmacy.drugaccountabilitylog'
+        drug_accountability_cls = django_apps.get_model(drug_accountability_model)
+        site_name = sites_name(instance.site_id)
+        try:
+            drug_batch = drug_accountability_cls.objects.get(
+                lot_number=instance.lot_number, injection_site=site_name)
+        except drug_accountability_cls.DoesNotExist:
+            raise LotNumberError(
+                f'Lot Number {instance.lot_number} does not exist, Please check enter '
+                f'an existing lot number')
+        else:
+            drug_batch.balance = drug_batch.balance - 0.1
+            drug_batch.save_base(raw=True)
 
+
+def sites_name(site_id):
+    sites = Site.objects.all()
+    for site in sites:
+        if site.id == site_id:
+            name = site.name.split('-')[1]
+            return name
+
+
+class LotNumberError(Exception):
+    pass
+
+
+def put_on_schedule(schedule_name, onschedule_model, instance=None,
+        onschedule_datetime=None):
     if instance:
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)
