@@ -94,8 +94,8 @@ CONCOMITANT_ROUTE = (
 COVID_PRODUCT_NAME = (
     ('moderna', 'Moderna'),
     ('pfizer', 'Pfizer-BioNTech'),
-    ('astrazaneca', 'AstraZaneca'),
-    ('azd_1222', 'AstraZaneca (AZD 1222)'),
+    ('astrazeneca', 'AstraZeneca'),
+    ('azd_1222', 'AstraZeneca (AZD 1222)'),
     ('janssen', 'Janssen'),
     ('novavax', 'Novavax'),
     (OTHER, 'Other'),
