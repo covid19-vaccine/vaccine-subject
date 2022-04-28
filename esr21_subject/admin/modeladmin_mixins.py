@@ -16,7 +16,6 @@ from edc_model_admin import (
     ModelAdminRedirectOnDeleteMixin)
 from edc_visit_tracking.modeladmin_mixins import (
     CrfModelAdminMixin as VisitTrackingCrfModelAdminMixin)
-from simple_history.admin import SimpleHistoryAdmin
 
 from .exportaction_mixin import ExportActionMixin
 
@@ -94,7 +93,6 @@ class CrfModelAdminMixin(VisitTrackingCrfModelAdminMixin,
                          ModelAdminMixin,
                          FieldsetsModelAdminMixin,
                          FormAsJSONModelAdminMixin,
-                         SimpleHistoryAdmin,
                          admin.ModelAdmin):
 
     post_url_on_delete_name = settings.DASHBOARD_URL_NAMES.get(

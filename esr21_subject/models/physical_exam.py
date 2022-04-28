@@ -1,6 +1,6 @@
+import decimal
 from django.db import models
 
-from edc_base.model_managers import HistoricalRecords
 from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
@@ -163,8 +163,6 @@ class PhysicalExam(CrfModelMixin):
         verbose_name='Abnormal, description of abnormality',
         blank=True,
         null=True, )
-
-    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'

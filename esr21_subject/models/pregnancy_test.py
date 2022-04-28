@@ -1,6 +1,5 @@
 from django.db import models
 from edc_constants.choices import POS_NEG, YES_NO
-from edc_base.model_managers import HistoricalRecords
 from edc_base.model_validators.date import datetime_not_future
 
 from .model_mixins import CrfModelMixin
@@ -36,8 +35,6 @@ class PregnancyTest(CrfModelMixin):
         max_length=20,
         null=True,
         blank=True)
-
-    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         verbose_name = 'Pregnancy Test'

@@ -1,5 +1,4 @@
 from django.db import models
-from edc_base.model_managers import HistoricalRecords
 
 from .model_mixins import CrfModelMixin
 from ..choices import AGREE_DISAGREE
@@ -51,8 +50,6 @@ class Covid19PreventativeBehaviours(CrfModelMixin):
         verbose_name='I avoid going to public places',
         max_length=20,
         choices=AGREE_DISAGREE)
-
-    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'
