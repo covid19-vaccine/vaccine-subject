@@ -74,7 +74,7 @@ class VaccinationHistory(UniqueSubjectIdentifierModelMixin, SiteModelMixin,
     source_of_info = models.CharField(
         verbose_name='Primary source of information',
         choices=COVID_INFO_SOURCE,
-        max_length=20, )
+        max_length=22, )
 
     objects = VaccinationHistoryManager()
 
