@@ -1,18 +1,16 @@
 from django.core.validators import RegexValidator
 from django.db import models
 from django_crypto_fields.fields import EncryptedCharField
-from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_fields import OtherCharField
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites import CurrentSiteManager
 from edc_base.sites.site_model_mixin import SiteModelMixin
 from edc_base.utils import get_utcnow
-from edc_consent.field_mixins import IdentityFieldsMixin
+from edc_consent.field_mixins import IdentityFieldsMixin, ReviewFieldsMixin
 from edc_consent.field_mixins import PersonalFieldsMixin, VulnerabilityFieldsMixin
 from edc_consent.managers import ConsentManager
 from edc_consent.model_mixins import ConsentModelMixin
-from edc_consent.site_consents import site_consents
 from edc_consent.validators import eligible_if_yes
 from edc_constants.choices import YES_NO
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierModelMixin
@@ -23,6 +21,7 @@ from ..choices import GENDER_OTHER
 from ..choices import IDENTITY_TYPE
 from ..subject_identifier import SubjectIdentifier
 from .model_mixins import SearchSlugModelMixin
+from edc_consent.site_consents import site_consents
 
 
 class InformedConsentManager(ConsentManager, SearchSlugManager, models.Manager):
@@ -35,7 +34,7 @@ class InformedConsentManager(ConsentManager, SearchSlugManager, models.Manager):
 class InformedConsent(ConsentModelMixin, SiteModelMixin,
                       UpdatesOrCreatesRegistrationModelMixin,
                       NonUniqueSubjectIdentifierModelMixin, IdentityFieldsMixin,
-                      PersonalFieldsMixin, VulnerabilityFieldsMixin,
+                      ReviewFieldsMixin, PersonalFieldsMixin, VulnerabilityFieldsMixin,
                       SearchSlugModelMixin, BaseUuidModel):
 
     subject_screening_model = 'esr21_subject.eligibilityconfirmation'

@@ -176,7 +176,7 @@ class AdverseEventRecord(MedDRAModelMixin, SiteModelMixin, BaseUuidModel):
         null=True)
 
     covid_related_ae = models.CharField(
-        verbose_name='Is this a covid-19 related AE?',
+        verbose_name='Is this a COVID-19 related AE?',
         max_length=3,
         null=True,
         choices=YES_NO)

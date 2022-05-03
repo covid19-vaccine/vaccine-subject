@@ -38,6 +38,7 @@ class PregnancyStatusAdmin(CrfModelAdminMixin, admin.ModelAdmin):
             'fields': (
                 'surgically_sterilized',
                 'amenorrhea_history',
+                'post_menopausal_range',
                 'post_menopausal',
                 'post_menopausal_other',
                 'child_bearing_potential',

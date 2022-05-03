@@ -6,7 +6,6 @@ from esr21_subject_validation.form_validators import VaccineDetailsFormValidator
 
 
 class VaccinationDetailsForm(SubjectModelFormMixin, forms.ModelForm):
-
     form_validator_cls = VaccineDetailsFormValidator
 
     class Meta:

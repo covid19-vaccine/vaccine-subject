@@ -1,14 +1,10 @@
 from django.apps import apps as django_apps
-from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_appointment.constants import COMPLETE_APPT
 from edc_appointment.models.appointment import Appointment
-from edc_base.utils import get_uuid
-from edc_registration.models import RegisteredSubject
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
-from ..models import InformedConsent
 from .adverse_event import AdverseEventRecord
 from .onschedule import OnSchedule
 
@@ -71,6 +67,15 @@ def put_on_schedule(schedule_name, onschedule_model, instance=None, onschedule_d
             schedule_name=schedule_name)
 
 
+def refresh_schedule(schedule_name, onschedule_model, instance=None):
+    if instance:
+        _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+                    onschedule_model=onschedule_model,
+                    name=schedule_name)
+        schedule.refresh_schedule(
+            subject_identifier=instance.subject_identifier)
+
+
 def is_subcohort_full():
         onschedule_subcohort = OnSchedule.objects.filter(
             schedule_name='esr21_sub_enrol_schedule')
@@ -78,9 +83,9 @@ def is_subcohort_full():
         return onschedule_subcohort.count() == 3000
 
 
-@receiver(post_save, weak=False, sender=InformedConsent, dispatch_uid="informed_consent_on_post_save")
+@receiver(post_save, weak=False, sender=InformedConsent,
+          dispatch_uid="informed_consent_on_post_save")
 def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
-
     if not raw and created:
         subject_identifier = instance.subject_identifier
         identity = instance.identity
@@ -92,11 +97,11 @@ def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
             pass
         else:
             try:
-                registered_subject = RegisteredSubject.objects.get(identity=consent.identity)
+                registered_subject = RegisteredSubject.objects.get(
+                    identity=consent.identity)
             except RegisteredSubject.DoesNotExist:
                 pass
             else:
                 registered_subject.identity = None
                 registered_subject.identity_or_pk = get_uuid()
                 registered_subject.save()
-

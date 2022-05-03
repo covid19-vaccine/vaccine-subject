@@ -2,6 +2,7 @@ from edc_visit_schedule.model_mixins import SubjectScheduleCrfModelMixin
 
 from django.db import models
 from django.db.models.deletion import PROTECT
+from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel, FormAsJSONModelMixin
 from edc_base.model_validators.date import datetime_not_future
 from edc_base.sites.site_model_mixin import SiteModelMixin
@@ -51,6 +52,8 @@ class CrfModelMixin(BaseCrfModelMixin, SubjectScheduleCrfModelMixin,
                    'the date/time this information was reported.'))
 
     objects = CrfModelManager()
+
+    history = HistoricalRecords()
 
     @property
     def subject_identifier(self):

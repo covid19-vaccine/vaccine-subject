@@ -95,7 +95,7 @@ class ConcomitantMedication(CrfModelMixin):
                   'receive a second dose or evaluability in the per-protocol '
                   'analysis set - please refer to the Protocol for further'
                   ' guidance',
-        blank=True,
+        blank=True,      
     )
 
     history = HistoricalRecords()
