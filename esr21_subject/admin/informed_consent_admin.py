@@ -1,8 +1,11 @@
 from collections import OrderedDict
+from django.apps import apps as django_apps
 from django.contrib import admin
+
 from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
 from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
+from django.utils.safestring import mark_safe
 from edc_consent.actions import (flag_as_verified_against_paper,
                                  unflag_as_verified_against_paper)
 from edc_model_admin import (
@@ -38,7 +41,7 @@ class ModelAdminMixin(ModelAdminNextUrlRedirectMixin, ModelAdminFormAutoNumberMi
             url_name = request.GET.dict().get('next').split(',')[0]
             attrs = request.GET.dict().get('next').split(',')[1:]
             options = {k: request.GET.dict().get(k)
-                       for k in attrs if request.GET.dict().get(k)}
+                        for k in attrs if request.GET.dict().get(k)}
             try:
                 redirect_url = reverse(url_name, kwargs=options)
             except NoReverseMatch as e:
@@ -48,7 +51,6 @@ class ModelAdminMixin(ModelAdminNextUrlRedirectMixin, ModelAdminFormAutoNumberMi
 
     def add_view(self, request, form_url='', extra_context=None):
         extra_context = extra_context or {}
-
         extra_context['form_version'] = self.get_form_version(request)
 
         return super().add_view(
@@ -63,11 +65,14 @@ class ModelAdminMixin(ModelAdminNextUrlRedirectMixin, ModelAdminFormAutoNumberMi
         return super().change_view(
             request, object_id, form_url=form_url, extra_context=extra_context)
 
+    @property
+    def consent_model_cls(self):
+        return django_apps.get_model('esr21_subject.informedconsent')
+
 
 @admin.register(InformedConsent, site=esr21_subject_admin)
 class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
                            SimpleHistoryAdmin, admin.ModelAdmin):
-
     form = InformedConsentForm
 
     fieldsets = (
@@ -123,7 +128,7 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
     search_fields = ('subject_identifier', 'dob',)
 
     def get_actions(self, request):
-
+        self.instructions = self.get_instructions(request)
         super_actions = super().get_actions(request)
 
         if ('esr21_subject.change_informedconsent'
@@ -152,8 +157,6 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
     def get_readonly_fields(self, request, obj=None):
         return super().get_readonly_fields(request, obj=obj) + audit_fields
 
-
-
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({
             'show_save': True,
@@ -162,3 +165,25 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
             'show_delete': True
         })
         return super().render_change_form(request, context, add, change, form_url, obj)
+
+    def get_instructions(self, request):
+        consent = None
+        message = None
+        subject_identifier = request.GET.dict().get('subject_identifier')
+        try:
+            consent = self.consent_model_cls.objects.get(
+                subject_identifier=subject_identifier)
+        except self.consent_model_cls.DoesNotExist:
+            message = mark_safe(
+                'Please complete the questions below. Required questions are in bold. '
+                'When all required questions are complete click SAVE. <br> Based on your '
+                'responses, additional questions may be required or some answers may '
+                'need to be corrected.<br>')
+        else:     
+            message = mark_safe(
+                f'Participant has previously consented for version {consent.version} <br>'
+                'Please complete the questions below. Required questions are in bold. '
+                'When all required questions are complete click SAVE. <br> Based on your '
+                'responses, additional questions may be required or some answers may '
+                'need to be corrected.<br>')
+        return message
