@@ -94,7 +94,8 @@ class MedicalHistory(CrfModelMixin):
         max_length=3
     )
 
-    comorbidities = models.ManyToManyField(Diseases, verbose_name='Comorbidities')
+    comorbidities = models.ManyToManyField(Diseases,
+                                        verbose_name='Comorbidities')
 
     comorbidities_other = models.CharField(
         verbose_name='Other specify',
@@ -104,15 +105,15 @@ class MedicalHistory(CrfModelMixin):
 
     no_of_mass_gathering = models.PositiveIntegerField(
         default=0,
-        verbose_name=('How many mass gatherings has the participant attended '
-                      'in the preceding 12 weeks? '),
+        verbose_name='How many mass gatherings has the participant attended '
+                    'in the preceding 12 weeks? ',
         help_text=('eg, weddings, funerals; defined as 50 or more people')
     )
 
     no_internal_trips = models.PositiveIntegerField(
         default=0,
-        verbose_name=('How many COVID-19 inter-zonal trips has the participant'
-                      ' made in Botswana in the past 12 weeks? ')
+        verbose_name='How many COVID-19 inter-zonal trips has the '
+                    'participant made in Botswana in the past 12 weeks? '
     )
 
     mode_of_transport = models.CharField(
@@ -128,8 +129,6 @@ class MedicalHistory(CrfModelMixin):
                      'work?',
         max_length=3
     )
-
-    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'

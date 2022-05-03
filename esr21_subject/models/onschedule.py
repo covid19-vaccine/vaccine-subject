@@ -28,8 +28,8 @@ class OnSchedule(
 
     def put_on_schedule(self):
         if self.onschedule_datetime and self.schedule_name:
-            _, schedule = site_visit_schedules.get_by_onschedule_model(
-                self._meta.label_lower)
+            _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+                onschedule_model=self._meta.label_lower, name=self.schedule_name)
             schedule.put_on_schedule(
                 onschedule_model_obj=self,
                 onschedule_datetime=self.onschedule_datetime,

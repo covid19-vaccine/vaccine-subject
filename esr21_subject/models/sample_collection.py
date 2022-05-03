@@ -1,5 +1,4 @@
 from django.db import models
-from edc_base.model_managers import HistoricalRecords
 from edc_constants.choices import YES_NO
 
 from .model_mixins import CrfModelMixin
@@ -28,8 +27,6 @@ class SampleCollection(CrfModelMixin):
         max_length=50,
         blank=True,
         null=True)
-
-    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'

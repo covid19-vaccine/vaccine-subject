@@ -1,10 +1,8 @@
 from collections import OrderedDict
-
 from django.contrib import admin
-from django.contrib import messages
+from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
 from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
-from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
 from edc_consent.actions import (flag_as_verified_against_paper,
                                  unflag_as_verified_against_paper)
 from edc_model_admin import (
@@ -15,11 +13,11 @@ from edc_model_admin import (
 from edc_model_admin import ModelAdminBasicMixin, ModelAdminReadOnlyMixin
 from simple_history.admin import SimpleHistoryAdmin
 
-from ..admin_site import esr21_subject_admin
+from .exportaction_mixin import ExportActionMixin
 from ..forms import InformedConsentForm
 from ..models import InformedConsent
-from .exportaction_mixin import ExportActionMixin
 from .modeladmin_mixins import VersionControlMixin
+from ..admin_site import esr21_subject_admin
 
 
 class ModelAdminMixin(ModelAdminNextUrlRedirectMixin, ModelAdminFormAutoNumberMixin,
@@ -95,6 +93,14 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
                 'optional_sample_collection',
             ),
         }),
+        ('Review Questions', {
+            'fields': (
+                'consent_reviewed',
+                'study_questions',
+                'assessment_score',
+                'consent_signature',
+                'consent_copy'),
+            'description': 'The following questions are directed to the interviewer.'}),
         audit_fieldset_tuple
     )
 
@@ -106,6 +112,11 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
         'is_dob_estimated': admin.VERTICAL,
         'optional_sample_collection': admin.VERTICAL,
         'consent_to_participate': admin.VERTICAL,
+        'consent_reviewed': admin.VERTICAL,
+        'study_questions': admin.VERTICAL,
+        'assessment_score': admin.VERTICAL,
+        'consent_signature': admin.VERTICAL,
+        'consent_copy': admin.VERTICAL
     }
 
     list_display = ('subject_identifier',
@@ -133,8 +144,7 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
 
             consent_actions = [
                 flag_as_verified_against_paper,
-                unflag_as_verified_against_paper,
-                update_screening_failure, ]
+                unflag_as_verified_against_paper]
 
             # Add actions from this ModelAdmin.
             actions = (self.get_action(action) for action in consent_actions)
@@ -163,16 +173,3 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
             'show_delete': True
         })
         return super().render_change_form(request, context, add, change, form_url, obj)
-
-
-def update_screening_failure(modeladmin, request, queryset, **kwargs):
-        for consent_obj in queryset:
-            consent_obj.screening_failure = True
-            consent_obj.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                f'\'{consent_obj._meta.verbose_name}\' for \' '
-                f'{consent_obj.subject_identifier}\' '
-                f'has been verified as screening failure')
-

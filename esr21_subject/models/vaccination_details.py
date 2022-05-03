@@ -3,13 +3,11 @@ from django_crypto_fields.fields import EncryptedCharField
 
 from edc_base.model_fields import OtherCharField
 from edc_base.model_validators import datetime_not_future, date_is_future
-from edc_base.model_managers import HistoricalRecords
 from edc_constants.choices import YES_NO, YES_NO_NA
-from edc_constants.constants import NOT_APPLICABLE
-from edc_protocol.validators import datetime_not_before_study_start
 
 from .model_mixins import CrfModelMixin
 from ..choices import VACCINATION_LOCATION, VACCINATION_DOSE
+from edc_constants.constants import NOT_APPLICABLE
 
 
 class VaccinationDetails(CrfModelMixin):
@@ -38,7 +36,6 @@ class VaccinationDetails(CrfModelMixin):
 
     vaccination_date = models.DateTimeField(
         verbose_name='Date and time the vaccination was administered?',
-        validators=[datetime_not_before_study_start, ],
         blank=True,
         null=True)
 
@@ -70,6 +67,7 @@ class VaccinationDetails(CrfModelMixin):
 
     expiry_date = models.DateField(
         verbose_name='Vaccination expiry date',
+        validators=[date_is_future, ],
         blank=True,
         null=True)
 
@@ -92,10 +90,9 @@ class VaccinationDetails(CrfModelMixin):
     next_vaccination_date = models.DateField(
         verbose_name=('When is the participant scheduled for their next '
                       'vaccination dose?'),
+        validators=[date_is_future, ],
         blank=True,
         null=True)
-
-    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'

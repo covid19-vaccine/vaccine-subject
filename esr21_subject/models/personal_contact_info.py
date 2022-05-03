@@ -3,7 +3,6 @@ from django.contrib.sites.models import Site
 from django.utils.safestring import mark_safe
 from django_crypto_fields.fields import EncryptedCharField
 from edc_action_item.model_mixins import ActionModelMixin
-from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import datetime_not_future, date_not_future
 from edc_base.model_validators import CellNumber
@@ -74,8 +73,6 @@ class PersonalContactInfo(LocatorModelMixin, ActionModelMixin, SiteModelMixin,
         validators=[CellNumber, ],
         blank=True,
         null=True,)
-
-    history = HistoricalRecords()
 
     class Meta:
         app_label = 'esr21_subject'

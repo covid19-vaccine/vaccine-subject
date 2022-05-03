@@ -1,4 +1,4 @@
-from django.utils.translation import gettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from edc_constants.constants import (OTHER, NOT_APPLICABLE, UNKNOWN, POS, NEG,
                                      IND, MALE, FEMALE, YES, NO)
@@ -89,6 +89,27 @@ CONCOMITANT_ROUTE = (
     ('vaginal', 'Vaginal'),
     (UNKNOWN, 'Unknown'),
     (OTHER, 'Other'),
+)
+
+COVID_PRODUCT_NAME = (
+    ('moderna', 'Moderna'),
+    ('pfizer', 'Pfizer-BioNTech'),
+    ('astrazeneca', 'AstraZeneca'),
+    ('azd_1222', 'AstraZeneca (AZD 1222)'),
+    ('janssen', 'Janssen'),
+    ('novavax', 'Novavax'),
+    (OTHER, 'Other'),
+)
+
+COVID_INFO_SOURCE = (
+    ('documented_evidence',
+     'Documented evidence (Vaccine card/Vaccine passport/Facility based record)'),
+    ('recall', 'Recall'),
+)
+
+DOSE_QUANTITY = (
+    ('1', '1'),
+    ('2', '2'),
 )
 
 EMPLOYMENT_STATUS = (
@@ -220,7 +241,8 @@ POS_NEG_IND = (
 
 PREGNANCY_TEST_TYPE = (
     ('urine', 'Urine'),
-    ('hcg', 'HCG'),)
+    ('hcg', 'HCG'),
+)
 
 REASON = (
     ('not_collected', 'Not collected'),
@@ -395,8 +417,9 @@ YES_NO_OTHER = (
     (OTHER, 'Other'))
 
 VACCINATION_DOSE = (
-    ("first_dose", "First Dose"),
-    ("second_dose", "Second Dose"),
+    ('first_dose', 'First Dose'),
+    ('second_dose', 'Second Dose'),
+    ('booster_dose', 'Booster Dose'),
     (NOT_APPLICABLE, 'Not applicable')
 )
 
@@ -407,8 +430,6 @@ HUBS = (
     ('greater_selibe_phikwe', 'Greater Selibe Phikwe'),
     ('serowe_or_palapye', 'Serowe/Palapye')
 )
-
-
 
 # TODO: Add options to the AE Form
 

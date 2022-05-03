@@ -1,6 +1,5 @@
 from django.db import models
 
-from edc_base.model_managers import HistoricalRecords
 from edc_base.model_validators import datetime_not_future
 from edc_constants.choices import YES_NO, YES_NO_NA, NOT_APPLICABLE
 
@@ -48,8 +47,6 @@ class TargetedPhysicalExamination(CrfModelMixin):
         choices=YES_NO_NA,
         blank=True,
         null=True,)
-
-    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'

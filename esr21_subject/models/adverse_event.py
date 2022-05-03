@@ -30,8 +30,6 @@ class AdverseEvent(CrfModelMixin):
         choices=YES_NO,
         max_length=3)
 
-    history = HistoricalRecords()
-
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'
         verbose_name = 'Adverse Event'
