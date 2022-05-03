@@ -104,7 +104,7 @@ COVID_PRODUCT_NAME = (
 COVID_INFO_SOURCE = (
     ('documented_evidence',
      'Documented evidence (Vaccine card/Vaccine passport/Facility based record)'),
-    ('recall', 'Recall'),
+    ('no_documented_evidence', 'No documented evidence'),
 )
 
 DOSE_QUANTITY = (
