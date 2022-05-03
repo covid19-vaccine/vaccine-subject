@@ -174,16 +174,13 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
             consent = self.consent_model_cls.objects.get(
                 subject_identifier=subject_identifier)
         except self.consent_model_cls.DoesNotExist:
-            message = mark_safe(
+            pass
+        else:
+            message = 'Participant has previously consented for '
+            f'version {consent.version} <br>'
+        return mark_safe(
+                message,
                 'Please complete the questions below. Required questions are in bold. '
                 'When all required questions are complete click SAVE. <br> Based on your '
                 'responses, additional questions may be required or some answers may '
                 'need to be corrected.<br>')
-        else:     
-            message = mark_safe(
-                f'Participant has previously consented for version {consent.version} <br>'
-                'Please complete the questions below. Required questions are in bold. '
-                'When all required questions are complete click SAVE. <br> Based on your '
-                'responses, additional questions may be required or some answers may '
-                'need to be corrected.<br>')
-        return message
