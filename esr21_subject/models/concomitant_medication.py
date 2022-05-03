@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.core.validators import MinValueValidator
 from django.db import models
 from edc_base.model_validators import date_not_future
+from edc_base.model_managers import HistoricalRecords
 from edc_constants.choices import YES_NO
 
 from ..choices import UNIT_OPTIONS, FREQUENCY, CONCOMITANT_ROUTE
@@ -96,6 +97,8 @@ class ConcomitantMedication(CrfModelMixin):
                   ' guidance',
         blank=True,      
     )
+
+    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'

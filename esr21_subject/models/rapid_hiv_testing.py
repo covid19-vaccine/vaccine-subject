@@ -1,4 +1,5 @@
 from django.db import models
+from edc_base.model_managers import HistoricalRecords
 from edc_base.model_validators import date_not_future
 from edc_constants.choices import YES_NO, POS_NEG, YES_NO_NA
 from edc_protocol.validators import date_not_before_study_start
@@ -67,6 +68,8 @@ class RapidHIVTesting(CrfModelMixin):
         max_length=250,
         blank=True,
         null=True)
+
+    history = HistoricalRecords()
 
     class Meta(CrfModelMixin.Meta):
         app_label = 'esr21_subject'

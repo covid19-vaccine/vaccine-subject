@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from django.contrib import admin
+from django.contrib import admin, messages
 from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
 from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
@@ -144,7 +144,8 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
 
             consent_actions = [
                 flag_as_verified_against_paper,
-                unflag_as_verified_against_paper]
+                unflag_as_verified_against_paper,
+                update_screening_failure, ]
 
             # Add actions from this ModelAdmin.
             actions = (self.get_action(action) for action in consent_actions)
@@ -173,3 +174,15 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
             'show_delete': True
         })
         return super().render_change_form(request, context, add, change, form_url, obj)
+
+
+def update_screening_failure(modeladmin, request, queryset, **kwargs):
+    for consent_obj in queryset:
+        consent_obj.screening_failure = True
+        consent_obj.save()
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            f'\'{consent_obj._meta.verbose_name}\' for \' '
+            f'{consent_obj.subject_identifier}\' '
+            f'has been verified as screening failure')

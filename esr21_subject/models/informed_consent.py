@@ -52,6 +52,11 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
         verbose_name='Screening identifier',
         max_length=50)
 
+    screening_failure = models.BooleanField(
+        verbose_name='screening failure',
+        default=False,
+    )
+
     consent_datetime = models.DateTimeField(
         verbose_name='Consent date and time',
         default=get_utcnow,
@@ -124,4 +129,4 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
         unique_together = (
             ('subject_identifier', 'version'),
             ('subject_identifier', 'screening_identifier', 'version'),
-            ('first_name', 'dob', 'initials', 'version'))
+            ('screening_failure', 'first_name', 'dob', 'initials', 'version'))

@@ -20,6 +20,8 @@ class SeriousAdverseEventRecordManager(models.Manager):
 class SeriousAdverseEvent(CrfModelMixin):
     """""Serious Adverse Events (SAE)"""""
 
+    history = HistoricalRecords()
+
     class Meta:
         app_label = 'esr21_subject'
         verbose_name = 'Serious Adverse Event'
@@ -253,5 +255,6 @@ class SeriousAdverseEventRecord(SiteModelMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'esr21_subject'
-        unique_together = ('serious_adverse_event', 'start_date', 'date_aware_of')
+        unique_together = ('serious_adverse_event', 'ae_number', 'start_date',
+                           'date_aware_of')
         verbose_name = 'Serious Adverse Event Record'
