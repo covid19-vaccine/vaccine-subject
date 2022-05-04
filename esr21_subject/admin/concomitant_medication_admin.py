@@ -1,21 +1,24 @@
 from django.contrib import admin
 
+from edc_model_admin.inlines import StackedInlineMixin
 from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
 
 from .modeladmin_mixins import CrfModelAdminMixin
-from ..forms import ConcomitantMedicationForm
-from ..models import ConcomitantMedication
+from ..forms import ConcomitantMedicationForm, MedicationForm
+from ..models import ConcomitantMedication, Medication
 from ..admin_site import esr21_subject_admin
 
 
-@admin.register(ConcomitantMedication, site=esr21_subject_admin)
-class ConcomitantMedicationAdmin(CrfModelAdminMixin, admin.ModelAdmin):
-    form = ConcomitantMedicationForm
+class MedicationInlineAdmin(StackedInlineMixin, admin.StackedInline):
+    model = Medication
+    form = MedicationForm
+
+    extra = 0
+    max_num = 3
+
     fieldsets = (
         (None, {
             'fields': (
-                'subject_visit',
-                'report_datetime',
                 'administered_date',
                 'medication_name',
                 'atc_code',
@@ -30,12 +33,28 @@ class ConcomitantMedicationAdmin(CrfModelAdminMixin, admin.ModelAdmin):
                 'ongoing',
                 'stop_date',
                 'prohibited',
-                'reason_prohibited')}),
-        audit_fieldset_tuple)
+                'reason_prohibited',
+            )}
+         ),)
 
     radio_fields = {'ongoing': admin.VERTICAL,
                     'prohibited': admin.VERTICAL, }
 
+
+@admin.register(ConcomitantMedication, site=esr21_subject_admin)
+class ConcomitantMedicationAdmin(CrfModelAdminMixin, admin.ModelAdmin):
+    form = ConcomitantMedicationForm
+
+    inlines = [MedicationInlineAdmin]
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'subject_visit',
+                'report_datetime',
+            ),
+        }),
+        audit_fieldset_tuple)
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({

@@ -1,6 +1,6 @@
 from .adverse_event_form import AdverseEventForm, AdverseEventRecordForm
 from .appointment_form import AppointmentForm
-from .concomitant_medication_form import ConcomitantMedicationForm
+from .concomitant_medication_form import ConcomitantMedicationForm, MedicationForm
 from .covid19_preventative_behaviours_form import Covid19PreventativeBehavioursForm
 from .covid19_results_form import Covid19ResultsForm
 from .covid19_symptomatic_infections_form import Covid19SymptomaticInfectionsForm
