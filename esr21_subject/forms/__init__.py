@@ -11,6 +11,7 @@ from .informed_consent_form import InformedConsentForm
 from .medical_history_form import MedicalHistoryForm, MedicalDiagnosisForm
 from .personal_contact_info_form import PersonalContactInfoForm
 from .physical_exam_form import PhysicalExamForm
+from .preg_outcome_form import PregOutcomeForm, OutcomeInlineForm
 from .pregnancy_status_form import PregnancyStatusForm
 from .pregnancy_test_form import PregnancyTestForm
 from .rapid_hiv_testing_form import RapidHIVTestingForm
@@ -26,4 +27,3 @@ from .targeted_physical_examination_form import TargetedPhysicalExaminationForm
 from .vaccination_details_form import VaccinationDetailsForm
 from .vaccination_history_form import VaccinationHistoryForm
 from .vital_signs_form import VitalSignsForm
-
