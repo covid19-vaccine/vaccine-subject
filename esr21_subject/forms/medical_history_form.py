@@ -22,8 +22,8 @@ class MedicalHistoryForm(SubjectModelFormMixin, forms.ModelForm):
         total_medical_diagnosis = int(self.data.get('medicaldiagnosis_set-TOTAL_FORMS'))
         relevant_history = self.data.get('relevant_history')
         if relevant_history == YES and total_medical_diagnosis == 0:
-                msg = 'Participant has relevant medical history, '\
-                f'{self.medical_diagnosis_cls._meta.verbose_name} is required'
+                msg = ('Participant has relevant medical history, '\
+                       f'{self.medical_diagnosis_cls._meta.verbose_name} is required')
                 raise forms.ValidationError(msg)
 
         no_internal_trips = self.data.get('no_internal_trips')

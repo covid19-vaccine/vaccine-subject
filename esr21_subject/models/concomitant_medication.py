@@ -4,6 +4,8 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from edc_base.model_validators import date_not_future
 from edc_base.model_managers import HistoricalRecords
+from edc_base.model_mixins import BaseUuidModel
+from edc_base.sites import SiteModelMixin
 from edc_constants.choices import YES_NO
 
 from ..choices import UNIT_OPTIONS, FREQUENCY, CONCOMITANT_ROUTE
@@ -11,6 +13,28 @@ from .model_mixins import CrfModelMixin
 
 
 class ConcomitantMedication(CrfModelMixin):
+
+    history = HistoricalRecords()
+
+    class Meta(CrfModelMixin.Meta):
+        app_label = 'esr21_subject'
+        verbose_name = 'Concomitant Medication'
+        verbose_name_plural = 'Concomitant Medication'
+
+
+class MedicationManager(models.Manager):
+
+    def get_by_natural_key(self, medication_name, administered_date, dose):
+        return self.get(medication_name=medication_name,
+                        administered_date=administered_date,
+                        dose=dose)
+
+
+class Medication(SiteModelMixin, BaseUuidModel):
+
+    concomitant_medication = models.ForeignKey(
+        ConcomitantMedication,
+        on_delete=models.PROTECT)
 
     administered_date = models.DateField(
         verbose_name='Date of administration (DD MMM YYYY):',
@@ -95,12 +119,21 @@ class ConcomitantMedication(CrfModelMixin):
                   'receive a second dose or evaluability in the per-protocol '
                   'analysis set - please refer to the Protocol for further'
                   ' guidance',
-        blank=True,      
+        blank=True,
     )
 
     history = HistoricalRecords()
 
-    class Meta(CrfModelMixin.Meta):
+    objects = MedicationManager()
+
+    def natural_key(self):
+        return (self.medication_name, self.administered_date, self.dose, ) + self.concomitant_medication.natural_key()
+
+    natural_key.dependencies = ['esr21_subject.concomitantmedication']
+
+    class Meta:
         app_label = 'esr21_subject'
-        verbose_name = 'Concomitant Medication'
-        verbose_name_plural = 'Concomitant Medication'
+        unique_together = ('concomitant_medication', 'medication_name',
+                           'administered_date', 'dose')
+        verbose_name = 'Medication'
+        verbose_name_plural = 'Medications'
