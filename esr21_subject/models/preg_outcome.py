@@ -9,15 +9,14 @@ from ..choices import PREG_OUTCOMES, BIRTH_METHODS
 
 
 class PregOutcome(CrfModelMixin):
+
     outcome_count = models.IntegerField(
         verbose_name='How many outcomes resulted from the reported pregnancy', )
 
     comments = models.TextField(
         verbose_name='Comments',
         blank=True,
-        null=True,
-    )
-
+        null=True,)
 
     class Meta(CrfModelMixin.Meta):
         verbose_name = 'Pregnancy Outcome'
@@ -53,9 +52,7 @@ class OutcomeInline(BaseUuidModel):
         verbose_name='Were any fetal/Infant congenital anomalies identified',
         help_text='If yes, complete the AE log.',
         max_length=30,
-        choices=YES_NO_NOT_EVALUATED,
-    )
-
+        choices=YES_NO_NOT_EVALUATED,)
 
     class Meta(CrfModelMixin.Meta):
         verbose_name = 'Pregnancy Outcome Inline'

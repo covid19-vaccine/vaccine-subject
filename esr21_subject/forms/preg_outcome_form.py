@@ -1,8 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from esr21_subject_validation.form_validators import \
-    OutcomeInlineFormValidator
+from esr21_subject_validation.form_validators import OutcomeInlineFormValidator
 from .form_mixins import SubjectModelFormMixin
 from ..models import PregOutcome, OutcomeInline
 
@@ -26,15 +25,14 @@ class PregOutcomeForm(SubjectModelFormMixin, forms.ModelForm):
             msg = {'outcome_count': 'The complete the outcome inline form'}
             raise ValidationError(msg)
 
-
     class Meta:
         model = PregOutcome
         fields = '__all__'
 
 
 class OutcomeInlineForm(SubjectModelFormMixin, forms.ModelForm):
-    form_validator_cls = OutcomeInlineFormValidator
 
+    form_validator_cls = OutcomeInlineFormValidator
 
     class Meta:
         model = OutcomeInline

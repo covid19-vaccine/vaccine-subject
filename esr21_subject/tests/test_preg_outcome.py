@@ -2,11 +2,12 @@ from dateutil.relativedelta import relativedelta
 from django.test import TestCase, tag
 from edc_appointment.models import Appointment
 from edc_base import get_utcnow
-from edc_constants.constants import NO, FEMALE, OMANG, POS, NEG
+from edc_constants.constants import NO, FEMALE, OMANG, POS, NEG, YES
 from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata
 from edc_visit_tracking.constants import SCHEDULED
+from edc_visit_schedule.models import SubjectScheduleHistory
 from model_mommy import mommy
 
 from esr21_subject.helper_classes import EnrollmentHelper
@@ -58,6 +59,12 @@ class TestPregOutcome(TestCase):
             cohort=self.cohort, subject_identifier=self.subject_identifier)
         self.schedule_enrollment.schedule_enrol()
 
+        history_obj = SubjectScheduleHistory.objects.get(
+            subject_identifier=self.subject_identifier,
+            schedule_name='esr21_fu_schedule3')
+        history_obj.offschedule_datetime = get_utcnow() + relativedelta(days=71)
+        history_obj.save_base(raw=True)
+
         self.subject_visit = mommy.make_recipe(
             'esr21_subject.subjectvisit',
             appointment=Appointment.objects.get(
@@ -81,6 +88,7 @@ class TestPregOutcome(TestCase):
         mommy.make_recipe(
             'esr21_subject.pregnancytest',
             subject_visit=self.subject_visit,
+            preg_performed=YES,
             result=POS)
 
         day_28_follow = mommy.make_recipe(
@@ -94,13 +102,14 @@ class TestPregOutcome(TestCase):
         mommy.make_recipe(
             'esr21_subject.pregnancytest',
             subject_visit=day_28_follow,
+            preg_performed=YES,
             result=NEG)
 
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='esr21_subject.pregoutcome',
                 subject_identifier=self.subject_identifier,
-                visit_code='101',
+                visit_code='1028',
                 visit_code_sequence='0').entry_status, REQUIRED)
 
         day_70_visit = mommy.make_recipe(
@@ -108,8 +117,13 @@ class TestPregOutcome(TestCase):
             appointment=Appointment.objects.get(
                 visit_code='1070',
                 subject_identifier=self.subject_identifier),
-            report_datetime=get_utcnow(),
+            report_datetime=get_utcnow() + relativedelta(days=70),
             reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'esr21_subject.pregnancytest',
+            subject_visit=day_70_visit,
+            result=NEG)
 
         self.assertEqual(
             CrfMetadata.objects.get(
