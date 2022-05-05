@@ -59,7 +59,8 @@ class MedicalHistoryAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     def get_key(self, request, obj=None):
         subject_identifier = getattr(self.get_appointment(request), 'subject_identifier', None)
 
-        participent_consent = InformedConsent.objects.filter(subject_identifier=subject_identifier, gender=MALE)
+        participent_consent = InformedConsent.objects.filter(
+            subject_identifier=subject_identifier, gender=MALE)
 
         if participent_consent:
             return 'remove_pregnancy_status'
@@ -109,8 +110,6 @@ class MedicalHistoryAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     }
 
     filter_horizontal = ('covid_symptoms', 'comorbidities')
-
-
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({
