@@ -13,6 +13,7 @@ from .offschedule import OffSchedule, OffScheduleIll
 from .onschedule import OnSchedule, OnScheduleIll
 from .personal_contact_info import PersonalContactInfo
 from .physical_exam import PhysicalExam
+from .preg_outcome import PregOutcome, OutcomeInline
 from .pregnancy_status import PregnancyStatus
 from .pregnancy_test import PregnancyTest
 from .rapid_hiv_testing import RapidHIVTesting

@@ -1,10 +1,9 @@
 from django.utils.translation import ugettext_lazy as _
-
 from edc_constants.constants import (OTHER, NOT_APPLICABLE, UNKNOWN, POS, NEG,
                                      IND, MALE, FEMALE, YES, NO)
 from edc_lab.constants import TUBE
-from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
+from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
 from .constants import NATIONAL_ID, NATIONAL_ID_RECEIPT
 
@@ -449,6 +448,21 @@ INTENSITY_SAE = (
     ('requires_or_prolongs_hospitalization', 'Requires or Prolongs Hospitalization'),
     ('congenital_anomaly_or_birth_defect', 'Requires or Prolongs Hospitalization'),
     ('is_life_threatening', 'Is Life Threatening'),
-    ('persist_or_sign_disability_or_Incapacity', 'Persist. or Sign. Disability/Incapacity'),
+    ('persist_or_sign_disability_or_Incapacity',
+     'Persist. or Sign. Disability/Incapacity'),
     ('other_medically_important Serious Event', 'Other Medically Important Serious Event')
+)
+
+PREG_OUTCOMES = (
+    ('full_term', 'Full-term live birth(>=37 weeks)'),
+    ('premature', 'Premature live birth(<37 weeks)'),
+    ('still_birth', 'Spontaneous fetal birth and/or still birth(>=20 weeks)'),
+    ('spontaneous_abortion', 'Spontaneous abortion(<20 weeks)'),
+    ('ectopic_preg', 'Ectopic pregnancy'),
+    ('elective_abortion', 'Therapeutic/elective abortion'),
+)
+
+BIRTH_METHODS = (
+    ('c_section', 'C-Section'),
+    ('vaginal', 'Viginal'),
 )

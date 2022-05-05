@@ -1,5 +1,4 @@
 from .adverse_event_admin import AdverseEventAdmin
-from .appointment_admin import Appointment
 from .concomitant_medication_admin import ConcomitantMedicationAdmin
 from .covid19_preventative_behaviours_admin import Covid19PreventativeBehavioursAdmin
 from .covid19_results_admin import Covid19ResultsAdmin
@@ -11,6 +10,7 @@ from .informed_consent_admin import InformedConsentAdmin
 from .medical_history_admin import MedicalHistoryAdmin
 from .personal_contact_info_admin import PersonalContactInfoAdmin
 from .physical_exam_admin import PhysicalExamAdmin
+from .preg_outcome_admin import PregOutcomeAdmin
 from .pregnancy_status_admin import PregnancyStatusAdmin
 from .pregnancy_test_admin import PregnancyTestAdmin
 from .rapid_hiv_testing_admin import RapidHIVTestingAdmin
@@ -23,4 +23,3 @@ from .targeted_physical_examination_admin import TargetedPhysicalExaminationAdmi
 from .vaccination_details_admin import VaccinationDetailsAdmin
 from .vaccination_history_admin import VaccinationHistoryAdmin
 from .vital_signs_admin import VitalSignsAdmin
-
