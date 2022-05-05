@@ -22,7 +22,7 @@ class MedicalHistoryForm(SubjectModelFormMixin, forms.ModelForm):
         total_medical_diagnosis = int(self.data.get('medicaldiagnosis_set-TOTAL_FORMS'))
         relevant_history = self.data.get('relevant_history')
         if relevant_history == YES and total_medical_diagnosis == 0:
-                msg = ('Participant has relevant medical history, '\
+                msg = ('Participant has relevant medical history, '
                        f'{self.medical_diagnosis_cls._meta.verbose_name} is required')
                 raise forms.ValidationError(msg)
 

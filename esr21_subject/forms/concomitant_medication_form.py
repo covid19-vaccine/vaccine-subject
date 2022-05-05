@@ -15,6 +15,9 @@ class MedicationForm(SubjectModelFormMixin, forms.ModelForm):
 
     form_validator_cls = ConcomitantMedicationFormValidator
 
+    def has_changed(self):
+        return True
+
     class Meta:
         model = Medication
         fields = '__all__'
