@@ -1,5 +1,5 @@
 from .adverse_event import AdverseEvent, AdverseEventRecord
-from .concomitant_medication import ConcomitantMedication
+from .concomitant_medication import ConcomitantMedication, Medication
 from .covid19_preventative_behaviours import Covid19PreventativeBehaviours
 from .covid19_results import Covid19Results
 from .covid19_symptomatic_infections import Covid19SymptomaticInfections
@@ -13,6 +13,7 @@ from .offschedule import OffSchedule, OffScheduleIll
 from .onschedule import OnSchedule, OnScheduleIll
 from .personal_contact_info import PersonalContactInfo
 from .physical_exam import PhysicalExam
+from .preg_outcome import PregOutcome, OutcomeInline
 from .pregnancy_status import PregnancyStatus
 from .pregnancy_test import PregnancyTest
 from .rapid_hiv_testing import RapidHIVTesting

@@ -7,6 +7,8 @@ from edc_facility.import_holidays import import_holidays
 from edc_sync.models import OutgoingTransaction
 from edc_sync.tests import SyncTestHelper
 from model_mommy import mommy
+
+from ..helper_classes import EnrollmentHelper
 from ..sync_models import sync_models
 
 

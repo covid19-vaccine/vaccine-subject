@@ -19,9 +19,7 @@ class PregnancyTest(CrfModelMixin):
         max_length=30,
         choices=PREGNANCY_TEST_TYPE,
         null=True,
-        blank=True
-
-    )
+        blank=True,)
 
     preg_date = models.DateTimeField(
         verbose_name='Date of pregnancy test',
