@@ -25,18 +25,25 @@ class EnrollmentHelper(object):
             pass
         else:
             if vaccination_history.received_vaccine == YES:
+                dose_recieved = vaccination_history.dose1_product_name
                 if vaccination_history.dose_quantity == '1':
-                    self.put_on_schedule(
-                        f'{self.cohort}_fu_schedule3',
-                        onschedule_model=onschedule_model,
-                        onschedule_datetime=vaccination_history.created.replace(microsecond=0))
+                    if dose_recieved == 'janssen':
+                        self.put_on_schedule(
+                            f'{self.cohort}_boost_schedule',
+                            onschedule_model=onschedule_model,
+                            onschedule_datetime=vaccination_history.created.replace(microsecond=0))
+                    else:
+                        self.put_on_schedule(
+                            f'{self.cohort}_fu_schedule3',
+                            onschedule_model=onschedule_model,
+                            onschedule_datetime=vaccination_history.created.replace(microsecond=0))
 
-                    # Schedule booster, 100days after dose 2 schedule
-                    booster_dt = vaccination_history.created + relativedelta(days=100)
-                    self.put_on_schedule(
-                        f'{self.cohort}_boost_schedule',
-                        onschedule_model=onschedule_model,
-                        onschedule_datetime=booster_dt.replace(microsecond=0))
+                        # Schedule booster, 100days after dose 2 schedule
+                        booster_dt = vaccination_history.created + relativedelta(days=100)
+                        self.put_on_schedule(
+                            f'{self.cohort}_boost_schedule',
+                            onschedule_model=onschedule_model,
+                            onschedule_datetime=booster_dt.replace(microsecond=0))
 
                 elif vaccination_history.dose_quantity == '2':
                     self.put_on_schedule(
