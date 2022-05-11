@@ -240,8 +240,8 @@ POS_NEG_IND = (
 )
 
 PREGNANCY_TEST_TYPE = (
-    ('urine', 'Urine'),
-    ('hcg', 'HCG'),
+    ('urine', 'Urine HCG'),
+    ('blood_hcg', 'Blood HCG'),
 )
 
 REASON = (
