@@ -464,5 +464,5 @@ PREG_OUTCOMES = (
 
 BIRTH_METHODS = (
     ('c_section', 'C-Section'),
-    ('vaginal', 'Viginal'),
+    ('vaginal', 'Vaginal'),
 )
