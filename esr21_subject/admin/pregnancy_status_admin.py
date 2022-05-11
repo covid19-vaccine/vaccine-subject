@@ -76,8 +76,9 @@ class PregnancyStatusAdmin(CrfModelAdminMixin, admin.ModelAdmin):
         consent_cls = django_apps.get_model('esr21_subject.informedconsent')
 
         try:
-            consent_obj = consent_cls.objects.get(
-                subject_identifier=request.GET.get('subject_identifier'))
+            consent_obj = consent_cls.objects.filter(
+                subject_identifier=request.GET.get('subject_identifier')).latest(
+                    'created')
         except consent_cls.DoesNotExist:
             pass
         else:
