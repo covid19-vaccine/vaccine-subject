@@ -96,7 +96,7 @@ COVID_PRODUCT_NAME = (
     ('astrazeneca', 'AstraZeneca'),
     ('azd_1222', 'AstraZeneca (AZD 1222)'),
     ('janssen', 'Janssen'),
-    ('novavax', 'Novavax'),
+    ('sinovac', 'Sinovac'),
     (OTHER, 'Other'),
 )
 
