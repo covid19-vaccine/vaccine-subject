@@ -39,7 +39,7 @@ class EligibilityConfirmation(NonUniqueSubjectIdentifierFieldMixin,
 
     # TODO: Asked a question about what type of answer
     any_vaccine_receipt = models.CharField(
-        verbose_name=('Any receipt of, or planned receipt of any COVID-19 vaccine '
+        verbose_name=('Any receipt of any COVID-19 vaccine '
                       'booster dose, or any medications, or investigational '
                       'products indicated for the prevention of SARS-CoV-2 '
                       'infection or treatment of COVID-19?'),
