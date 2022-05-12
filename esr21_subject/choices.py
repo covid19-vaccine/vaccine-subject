@@ -155,7 +155,7 @@ GENERAL_APPEARANCE = (
 )
 
 HOSPITALISATION_OUTCOME = (
-    ('expired', 'Expired'),
+    ('death', 'Death'),
     ('hospice_care', 'Home: Hospice Care'),
     ('self_care', 'Home: Self Care'),
     ('hospice_medical_facility', 'Hospice Medical Facility'),
