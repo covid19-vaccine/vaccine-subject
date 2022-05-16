@@ -7,7 +7,7 @@ from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
 from django.utils.safestring import mark_safe
 from edc_consent.actions import (flag_as_verified_against_paper,
-                                unflag_as_verified_against_paper)
+                                 unflag_as_verified_against_paper)
 from edc_model_admin import (
     ModelAdminFormAutoNumberMixin, ModelAdminInstitutionMixin,
     audit_fieldset_tuple, audit_fields, ModelAdminNextUrlRedirectMixin,
@@ -24,10 +24,10 @@ from ..admin_site import esr21_subject_admin
 
 
 class ModelAdminMixin(ModelAdminNextUrlRedirectMixin, ModelAdminFormAutoNumberMixin,
-                    ModelAdminRevisionMixin, ModelAdminReplaceLabelTextMixin,
-                    ModelAdminInstitutionMixin, ModelAdminReadOnlyMixin,
-                    VersionControlMixin, ModelAdminFormInstructionsMixin,
-                    ModelAdminAuditFieldsMixin, ExportActionMixin):
+                      ModelAdminRevisionMixin, ModelAdminReplaceLabelTextMixin,
+                      ModelAdminInstitutionMixin, ModelAdminReadOnlyMixin,
+                      VersionControlMixin, ModelAdminFormInstructionsMixin,
+                      ModelAdminAuditFieldsMixin, ExportActionMixin):
 
     list_per_page = 10
     date_hierarchy = 'modified'
@@ -40,8 +40,7 @@ class ModelAdminMixin(ModelAdminNextUrlRedirectMixin, ModelAdminFormAutoNumberMi
         if request.GET.dict().get('next'):
             url_name = request.GET.dict().get('next').split(',')[0]
             attrs = request.GET.dict().get('next').split(',')[1:]
-            options = {k: request.GET.dict().get(k)
-                        for k in attrs if request.GET.dict().get(k)}
+            options = {k: request.GET.dict().get(k) for k in attrs if request.GET.dict().get(k)}
             try:
                 redirect_url = reverse(url_name, kwargs=options)
             except NoReverseMatch as e:
@@ -96,6 +95,7 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
                 'confirm_identity',
                 'consent_to_participate',
                 'optional_sample_collection',
+                'version'
             ),
         }),
         ('Review Questions', {
@@ -168,7 +168,7 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
         return super_actions
 
     def get_readonly_fields(self, request, obj=None):
-        return super().get_readonly_fields(request, obj=obj) + audit_fields
+        return super().get_readonly_fields(request, obj=obj) + audit_fields + ('version', )
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({
