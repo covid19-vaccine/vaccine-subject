@@ -174,7 +174,9 @@ class MedicalDiagnosis(SiteModelMixin, BaseUuidModel):
 
     rel_conc_meds = models.TextField(
         max_length=150,
-        verbose_name='Related concomitant medications')
+        verbose_name='Related concomitant medications',
+        null=True,
+        blank=True)
 
     history = HistoricalRecords()
 
