@@ -16,7 +16,8 @@ class VisitFormValidator(BaseVisitFormValidator):
 
     def clean(self):
         report_datetime = self.cleaned_data.get('report_datetime')
-        self.validate_against_consent_datetime(report_datetime=report_datetime)
+        if self.instance and not getattr(self.instance, 'id', None):
+            self.validate_against_consent_datetime(report_datetime=report_datetime)
         super().clean()
 
     @property
