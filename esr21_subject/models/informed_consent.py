@@ -1,5 +1,7 @@
 from django.core.validators import RegexValidator
 from django.db import models
+from django.apps import apps as django_apps
+
 from django_crypto_fields.fields import EncryptedCharField
 from edc_base.model_fields import OtherCharField
 from edc_base.model_managers import HistoricalRecords
@@ -119,8 +121,13 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
 
     @property
     def consent_version(self):
-        consent = site_consents.get_consent(report_datetime=self.consent_datetime)
-        return consent.version
+        if self.version:
+            return self.version
+        return '3'
+
+    @property
+    def consent_model_cls(self):
+        return django_apps.get_model(self.consent_model)
 
     class Meta(ConsentModelMixin.Meta):
         app_label = 'esr21_subject'
