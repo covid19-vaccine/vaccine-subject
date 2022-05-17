@@ -96,7 +96,7 @@ COVID_PRODUCT_NAME = (
     ('astrazeneca', 'AstraZeneca'),
     ('azd_1222', 'AstraZeneca (AZD 1222)'),
     ('janssen', 'Janssen'),
-    ('novavax', 'Novavax'),
+    ('sinovac', 'Sinovac'),
     (OTHER, 'Other'),
 )
 
@@ -155,7 +155,7 @@ GENERAL_APPEARANCE = (
 )
 
 HOSPITALISATION_OUTCOME = (
-    ('expired', 'Expired'),
+    ('death', 'Death'),
     ('hospice_care', 'Home: Hospice Care'),
     ('self_care', 'Home: Self Care'),
     ('hospice_medical_facility', 'Hospice Medical Facility'),
@@ -239,8 +239,8 @@ POS_NEG_IND = (
 )
 
 PREGNANCY_TEST_TYPE = (
-    ('urine', 'Urine'),
-    ('hcg', 'HCG'),
+    ('urine', 'Urine HCG'),
+    ('blood_hcg', 'Blood HCG'),
 )
 
 REASON = (
@@ -464,5 +464,5 @@ PREG_OUTCOMES = (
 
 BIRTH_METHODS = (
     ('c_section', 'C-Section'),
-    ('vaginal', 'Viginal'),
+    ('vaginal', 'Vaginal'),
 )

@@ -113,7 +113,7 @@ class ScreeningEligibility(UniqueSubjectIdentifierModelMixin, SiteModelMixin,
 
     # covid symptomatic test
     symptomatic_infections_experiences = models.CharField(
-        verbose_name='Are you currently experiencing covid like symptoms',
+        verbose_name='Are you currently experiencing COVID-like symptoms',
         max_length=20,
         choices=YES_NO, )
 

@@ -1,7 +1,10 @@
+from django import forms
 from edc_visit_schedule.model_mixins import SubjectScheduleCrfModelMixin
 
+from django.apps import apps as django_apps
 from django.db import models
 from django.db.models.deletion import PROTECT
+
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel, FormAsJSONModelMixin
 from edc_base.model_validators.date import datetime_not_future
@@ -14,6 +17,7 @@ from edc_reference.model_mixins import ReferenceModelMixin
 from edc_visit_tracking.managers import CrfModelManager as VisitTrackingCrfModelManager
 from edc_visit_tracking.model_mixins import CrfModelMixin as BaseCrfModelMixin
 from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
+from .consent_version_model_mixin import ConsentVersionModelModelMixin
 
 from ..subject_visit import SubjectVisit
 
@@ -31,6 +35,7 @@ class CrfModelManager(VisitTrackingCrfModelManager):
 
 
 class CrfModelMixin(BaseCrfModelMixin, SubjectScheduleCrfModelMixin,
+                    ConsentVersionModelModelMixin,
                     RequiresConsentFieldsModelMixin, PreviousVisitModelMixin,
                     UpdatesCrfMetadataModelMixin, SiteModelMixin,
                     FormAsJSONModelMixin, ReferenceModelMixin, BaseUuidModel):

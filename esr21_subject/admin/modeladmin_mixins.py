@@ -32,7 +32,7 @@ class VersionControlMixin:
         form_version = form_versions.get(model_name)
 
         return mark_safe(
-                f' Version: {form_version} ')
+                f'Form version: {form_version} ')
 
     def get_timepoint(self, request):
 

@@ -1,6 +1,8 @@
 from django.db import models
+from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import date_not_future
+from edc_base.sites import SiteModelMixin
 from edc_constants.choices import YES_NO_NOT_EVALUATED
 from edc_protocol.validators import date_not_before_study_start
 
@@ -18,12 +20,21 @@ class PregOutcome(CrfModelMixin):
         blank=True,
         null=True,)
 
+    history = HistoricalRecords()
+
     class Meta(CrfModelMixin.Meta):
         verbose_name = 'Pregnancy Outcome'
         app_label = 'esr21_subject'
 
 
-class OutcomeInline(BaseUuidModel):
+class OutcomeManager(models.Manager):
+
+    def get_by_natural_key(self, outcome_date, specify_outcome):
+        return self.get(outcome_date=outcome_date,
+                        specify_outcome=specify_outcome)
+
+
+class OutcomeInline(SiteModelMixin, BaseUuidModel):
     preg_outcome = models.ForeignKey(
         PregOutcome,
         on_delete=models.PROTECT)
@@ -54,6 +65,15 @@ class OutcomeInline(BaseUuidModel):
         max_length=30,
         choices=YES_NO_NOT_EVALUATED,)
 
-    class Meta(CrfModelMixin.Meta):
+    objects = OutcomeManager()
+
+    history = HistoricalRecords()
+
+    def natural_key(self):
+        return (self.outcome_date, self.specify_outcome,) + self.preg_outcome.natural_key()
+
+    natural_key.dependencies = ['esr21_subject.pregoutcome']
+
+    class Meta:
         verbose_name = 'Pregnancy Outcome Inline'
         app_label = 'esr21_subject'
