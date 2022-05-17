@@ -76,5 +76,4 @@ class OutcomeInline(SiteModelMixin, BaseUuidModel):
 
     class Meta:
         verbose_name = 'Pregnancy Outcome Inline'
-        unique_together = ('preg_outcome', 'outcome_date', 'specify_outcome')
         app_label = 'esr21_subject'

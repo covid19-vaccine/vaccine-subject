@@ -68,7 +68,9 @@ class VitalSigns(CrfModelMixin):
         validators=[MinValueValidator(0), ],
         max_digits=5,
         decimal_places=2,
-        help_text='Fixed Unit: %', )
+        help_text='Fixed Unit: %',
+        null=True,
+        blank=True)
 
     comment = models.TextField(
         verbose_name='Comment',

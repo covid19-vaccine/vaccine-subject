@@ -96,7 +96,6 @@ class AdverseEventRecord(MedDRAModelMixin, SiteModelMixin, BaseUuidModel):
         verbose_name='Outcome',
         max_length=50,
         choices=OUTCOME,
-        blank=True,
         null=True)
 
     sequelae_specify = OtherCharField(
@@ -118,7 +117,6 @@ class AdverseEventRecord(MedDRAModelMixin, SiteModelMixin, BaseUuidModel):
         verbose_name='Action Taken, Investigational Product',
         max_length=25,
         null=True,
-        blank=True,
         choices=ACTION_TAKEN)
 
     ctcae_grade = models.CharField(
