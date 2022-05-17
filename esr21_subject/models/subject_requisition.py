@@ -20,6 +20,7 @@ from edc_visit_tracking.model_mixins import CrfModelMixin as VisitTrackingCrfMod
 from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
 from edc_senaite_interface.model_mixins import SenaiteRequisitionModelMixin
 from edc_visit_schedule.model_mixins import SubjectScheduleCrfModelMixin
+from ..models.model_mixins import ConsentVersionModelModelMixin
 
 from ..choices import REASON_NOT_DRAWN, ITEM_TYPE, HUBS
 from .subject_visit import SubjectVisit
@@ -33,6 +34,7 @@ class Manager(VisitTrackingCrfModelManager, SearchSlugManager):
 
 class SubjectRequisition(NonUniqueSubjectIdentifierFieldMixin,
                          RequisitionModelMixin, RequisitionStatusMixin,
+                         ConsentVersionModelModelMixin,
                          RequisitionIdentifierMixin, VisitTrackingCrfModelMixin,
                          SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
                          PreviousVisitModelMixin, RequisitionReferenceModelMixin,
