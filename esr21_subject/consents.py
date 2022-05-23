@@ -35,7 +35,7 @@ v3 = Consent(
         datetime(2023, 12, 31, 23, 59, 59), tzinfo=tzinfo).to('UTC').datetime,
     age_min=18,
     age_is_adult=18,
-    age_max=64,
+    age_max=100,
     gender=[MALE, FEMALE, OTHER])
 
 site_consents.validator_cls = ConsentObjectValidator
