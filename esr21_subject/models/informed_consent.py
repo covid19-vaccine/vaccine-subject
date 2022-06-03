@@ -77,7 +77,7 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
         blank=False)
 
     optional_sample_collection = models.CharField(
-        verbose_name='Do you consent to optional sample collection?',
+        verbose_name='Do you consent to optional sample storage?',
         choices=YES_NO,
         max_length=3,)
 
