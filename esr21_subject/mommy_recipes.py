@@ -5,7 +5,8 @@ from faker import Faker
 from model_mommy.recipe import Recipe, seq
 
 from .models import (Covid19SymptomaticInfections, OffSchedule,
-                     PregnancyStatus, Covid19Results, VaccinationHistory, PregnancyTest)
+                     PregnancyStatus, Covid19Results, VaccinationHistory, PregnancyTest,
+                     MedicalHistory, MedicalDiagnosis)
 from .models import EligibilityConfirmation, InformedConsent, SubjectVisit
 from .models import RapidHIVTesting, OffScheduleIll, ScreeningEligibility
 
@@ -45,15 +46,15 @@ subjectvisit = Recipe(
 
 rapidhivtesting = Recipe(
     RapidHIVTesting,
-    )
+)
 
 pregnancystatus = Recipe(
     PregnancyStatus,
-    )
+)
 
 pregnancytest = Recipe(
     PregnancyTest,
-    )
+)
 
 covid19symptomaticinfections = Recipe(
     Covid19SymptomaticInfections)
@@ -70,3 +71,11 @@ covid19results = Recipe(
 
 vaccinationhistory = Recipe(
     VaccinationHistory)
+
+medicalhistory = Recipe(
+    MedicalHistory,
+)
+
+medicaldiagnosis = Recipe(
+    MedicalDiagnosis,
+)
