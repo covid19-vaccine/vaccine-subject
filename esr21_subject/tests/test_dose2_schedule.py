@@ -64,6 +64,39 @@ class TestBoosterScheduleSetup(TestCase):
         self.assertEqual(OnSchedule.objects.filter(
             subject_identifier=self.consent.subject_identifier,
             schedule_name='esr21_fu_schedule3').count(), 1)
+     
+    @tag('jans')    
+    def test_dose2_jans_onschedule(self):
+        consent = mommy.make_recipe(
+            'esr21_subject.informedconsent',
+            subject_identifier='123-9871',
+            version='3')
+        
+        mommy.make_recipe(
+            'esr21_subject.screeningeligibility',
+            subject_identifier=consent.subject_identifier,
+            is_eligible=True)
+        
+        mommy.make_recipe(
+            'esr21_subject.vaccinationhistory',
+            subject_identifier=consent.subject_identifier,
+            received_vaccine=YES,
+            dose_quantity='1',
+            dose1_product_name='janssen')
+        
+        self.cohort = 'esr21'
+        self.schedule_enrollment = self.enrol_helper(
+            cohort=self.cohort, subject_identifier=consent.subject_identifier)
+        self.schedule_enrollment.schedule_enrol()
+        
+        
+        self.assertEqual(OnSchedule.objects.filter(
+            subject_identifier=consent.subject_identifier,
+            schedule_name='esr21_fu_schedule3').count(), 1)
+        
+        self.assertEqual(OnSchedule.objects.filter(
+            subject_identifier=consent.subject_identifier,
+            schedule_name='esr21_boost_schedule').count(), 1)
 
     def test_dose2_not_onschedule(self):
         consent = mommy.make_recipe(
