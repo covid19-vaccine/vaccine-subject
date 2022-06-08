@@ -68,7 +68,6 @@ class VaccinationDetails(CrfModelMixin):
 
     expiry_date = models.DateField(
         verbose_name='Vaccination expiry date',
-        validators=[date_is_future, ],
         blank=True,
         null=True)
 
@@ -91,7 +90,6 @@ class VaccinationDetails(CrfModelMixin):
     next_vaccination_date = models.DateField(
         verbose_name=('When is the participant scheduled for their next '
                       'vaccination dose?'),
-        validators=[date_is_future, ],
         blank=True,
         null=True)
 
