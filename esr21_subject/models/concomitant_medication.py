@@ -71,7 +71,9 @@ class Medication(SiteModelMixin, BaseUuidModel):
     frequency = models.CharField(
         verbose_name='Frequency',
         max_length=25,
-        choices=FREQUENCY)
+        choices=FREQUENCY,
+        blank=True,
+        null=True)
 
     frequency_other = models.CharField(
         verbose_name='Other, specify',
