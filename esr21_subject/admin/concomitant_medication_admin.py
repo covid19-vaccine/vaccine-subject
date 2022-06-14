@@ -14,7 +14,6 @@ class MedicationInlineAdmin(StackedInlineMixin, admin.StackedInline):
     form = MedicationForm
 
     extra = 1
-    max_num = 3
 
     fieldsets = (
         (None, {
