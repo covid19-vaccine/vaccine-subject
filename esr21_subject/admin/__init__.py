@@ -23,3 +23,4 @@ from .targeted_physical_examination_admin import TargetedPhysicalExaminationAdmi
 from .vaccination_details_admin import VaccinationDetailsAdmin
 from .vaccination_history_admin import VaccinationHistoryAdmin
 from .vital_signs_admin import VitalSignsAdmin
+from .protocol_deviations_admin import ProtocolDeviationsAdmin

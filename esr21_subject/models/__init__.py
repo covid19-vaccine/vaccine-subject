@@ -29,3 +29,4 @@ from .vaccination_details import VaccinationDetails
 from .vaccination_history import VaccinationHistory
 from .vital_signs import VitalSigns
 from .model_mixins import ConsentVersionModelModelMixin
+from .protocol_deviations import ProtocolDeviations

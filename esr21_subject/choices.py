@@ -466,3 +466,7 @@ BIRTH_METHODS = (
     ('c_section', 'C-Section'),
     ('vaginal', 'Vaginal'),
 )
+
+DEVIATION_CHOICES = (
+    ('test_form1', 'test_form1'),
+)

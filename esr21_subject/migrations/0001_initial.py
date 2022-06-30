@@ -37,8 +37,8 @@ class Migration(migrations.Migration):
     dependencies = [
         ('sites', '0002_alter_domain_unique'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('edc_lab', '0017_auto_20220321_1056'),
-        ('edc_appointment', '0016_auto_20211210_1736'),
+        # ('edc_lab', '0017_auto_20220321_1056'),
+        # ('edc_appointment', '0016_auto_20211210_1736'),
     ]
 
     operations = [
