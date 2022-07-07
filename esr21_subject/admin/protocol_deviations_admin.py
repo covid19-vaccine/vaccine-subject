@@ -5,6 +5,7 @@ from ..admin_site import esr21_subject_admin
 from ..forms import ProtocolDeviationsForm
 from ..models import ProtocolDeviations
 from .modeladmin_mixins import ModelAdminMixin
+from edc_registration.models import RegisteredSubject
 
 from django.apps import apps
 
@@ -17,7 +18,7 @@ class ProtocolDeviationsAdmin(ModelAdminMixin, admin.ModelAdmin):
         (None, {
             "fields": (
                 'report_datetime',
-                'subject_identifier',
+                'subject_identifiers',
                 'deviation_name',
                 'deviation_description',
                 'esr21_form_name',
@@ -27,11 +28,10 @@ class ProtocolDeviationsAdmin(ModelAdminMixin, admin.ModelAdmin):
         audit_fieldset_tuple
     )
     
-    # filter_horizontal = ('subject_identifiers',)
-    search_fields = ('subject_identifier',)
-    
+    filter_horizontal = ('subject_identifiers',)
+        
     list_display = [
-        'created', 'subject_identifier', 'deviation_name','esr21_form_name']
+        'created', 'deviation_name','esr21_form_name']
     
     def get_form(self, request, obj=None, *args, **kwargs):
         
@@ -50,6 +50,6 @@ class ProtocolDeviationsAdmin(ModelAdminMixin, admin.ModelAdmin):
 
         form.custom_choices = form_choices
         return form
-    
+
     
     

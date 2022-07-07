@@ -467,6 +467,3 @@ BIRTH_METHODS = (
     ('vaginal', 'Vaginal'),
 )
 
-DEVIATION_CHOICES = (
-    ('test_form1', 'test_form1'),
-)
