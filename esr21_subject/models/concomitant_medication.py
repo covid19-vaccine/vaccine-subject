@@ -55,7 +55,7 @@ class Medication(SiteModelMixin, BaseUuidModel):
         validators=[MinValueValidator(Decimal('0.00'))],
         decimal_places=2,
         blank=True,
-        max_digits=4)  # can only accept positive numbers
+        max_digits=6)  # can only accept positive numbers
 
     unit = models.CharField(
         verbose_name='Unit',
@@ -71,7 +71,9 @@ class Medication(SiteModelMixin, BaseUuidModel):
     frequency = models.CharField(
         verbose_name='Frequency',
         max_length=25,
-        choices=FREQUENCY)
+        choices=FREQUENCY,
+        blank=True,
+        null=True)
 
     frequency_other = models.CharField(
         verbose_name='Other, specify',
