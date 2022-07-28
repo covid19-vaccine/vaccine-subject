@@ -31,4 +31,4 @@ from .vital_signs import VitalSigns
 from .model_mixins import ConsentVersionModelModelMixin
 from .protocol_deviations import ProtocolDeviations
 from .note_to_file import NoteToFile
-# NoteToFileDocs
+from .note_to_file import NoteToFileDocs

@@ -1,7 +1,7 @@
 from django import forms
 
 from ..models import NoteToFile
-# from ..models import NoteToFileDocs
+from ..models import NoteToFileDocs
 
 
 class NoteToFileForm(forms.ModelForm):
@@ -11,8 +11,10 @@ class NoteToFileForm(forms.ModelForm):
         fields = '__all__'
         
         
-# class NoteToFileDocsForm(forms.ModelForm): 
+class NoteToFileDocsForm(forms.ModelForm): 
     
-#     class Meta:
-#         model = NoteToFileDocs
-#         fields = '__all__'       
+    def has_changed(self):
+        return True
+    class Meta:
+        model = NoteToFileDocs
+        fields = '__all__'       

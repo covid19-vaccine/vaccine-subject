@@ -48,6 +48,10 @@ class ProtocolDeviations(SiteModelMixin,BaseUuidModel):
         verbose_name='Form\'s that have deviations',
         max_length=200,)
     
+    deviation_form_name = models.CharField(
+        verbose_name='Form\'s that have deviations',
+        max_length=200,)
+    
     comment = models.TextField(
         max_length=250,
         verbose_name='Comments',

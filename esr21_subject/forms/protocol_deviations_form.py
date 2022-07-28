@@ -4,6 +4,8 @@ from esr21_subject_validation.form_validators import ProtocolDeviationFormValida
 
 class ProtocolDeviationsForm(forms.ModelForm):
     
+    
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         choices = self.custom_choices
@@ -11,8 +13,15 @@ class ProtocolDeviationsForm(forms.ModelForm):
         self.fields['esr21_form_name'].widget = forms.CheckboxSelectMultiple(
             choices=choices,
         ) 
+        
+        self.fields['deviation_form_name'] = forms.MultipleChoiceField(
+            label='Forms with Deviations',
+            widget=forms.CheckboxSelectMultiple,
+            choices=choices
+        )
           
     form_validator_cls = ProtocolDeviationFormValidator
+    
     
     class Meta:
         model = ProtocolDeviations

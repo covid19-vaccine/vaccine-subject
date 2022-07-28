@@ -22,6 +22,7 @@ class ProtocolDeviationsAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'deviation_name',
                 'deviation_description',
                 'esr21_form_name',
+                'deviation_form_name',
                 'comment',
             ),
         }),
@@ -31,7 +32,7 @@ class ProtocolDeviationsAdmin(ModelAdminMixin, admin.ModelAdmin):
     filter_horizontal = ('subject_identifiers',)
         
     list_display = [
-        'created', 'deviation_name','esr21_form_name']
+        'created', 'deviation_name','esr21_form_name','deviation_form_name']
     
     def get_form(self, request, obj=None, *args, **kwargs):
         
@@ -40,15 +41,16 @@ class ProtocolDeviationsAdmin(ModelAdminMixin, admin.ModelAdmin):
         esr21_subject = apps.get_app_config('esr21_subject')
         
         esr21_models = {
-            model.__name__: model for model in esr21_subject.get_models() if not model.__name__.__contains__('Historical') or model.__module__.__contains__('list_model')
+            model._meta.verbose_name: model._meta.label_lower for model in esr21_subject.get_models() if not model.__name__.__contains__('Historical') or model.__module__.__contains__('list_model')
         }
         form_choices =()
-        model_key = ((val.__module__,key.lower()) for key,val in esr21_models.items() if 'list_model' not in val.__module__)
+        model_key = ((val.lower(),key) for key,val in esr21_models.items() if 'list_model' not in val)
         for field_attr in model_key:
             form_choices +=((field_attr),)
         form_choices   
 
         form.custom_choices = form_choices
+
         return form
 
     

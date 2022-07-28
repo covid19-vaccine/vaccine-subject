@@ -15,14 +15,14 @@ class NoteToFileManager(models.Manager):
 
     def get_by_natural_key(self, note_name):
         return self.get(note_name=note_name)
-    
-    class Meta:
-        abstract = True
 
 class NoteToFile(SiteModelMixin,BaseUuidModel):
     
     """A model for note to files
     """
+    @property
+    def related_objects(self):
+        return getattr(self, 'note_to_file')
     
     report_datetime = models.DateTimeField(
         verbose_name="Report Date and Time",
@@ -55,6 +55,8 @@ class NoteToFile(SiteModelMixin,BaseUuidModel):
         blank=True,
         null=True)
     
+    objects = NoteToFileManager()
+    
     def __str__(self):
         return self.note_name
     
@@ -62,29 +64,38 @@ class NoteToFile(SiteModelMixin,BaseUuidModel):
         return (self.note_name,)
     
     # natural_key.dependencies = ['sites.Site']
-
-    objects = NoteToFileManager()
     
     class Meta:
         app_label = 'esr21_subject'
         verbose_name = 'Note to file'
         verbose_name_plural = 'Notes to file'
         
-# class NoteToFileDocs(BaseUuidModel):
+        
+        
+class NoteToFileDocsManager(models.Manager):
 
-#     notes_to_file = models.ForeignKey(
-#         NoteToFile,
-#         on_delete=models.PROTECT,
-#         related_name='note_to_file')
+    def get_by_natural_key(self, note_to_file):
+        return self.get(note_to_file=note_to_file)        
+class NoteToFileDocs(BaseUuidModel):
 
-#     file_save = models.FileField(upload_to='note_to_file/', blank=True, null=True)
+    notes_to_file = models.ForeignKey(
+        NoteToFile,
+        on_delete=models.PROTECT,
+        related_name='note_to_file')
+
+    def upload_to_path(instance, filename):
+        today = get_utcnow().date().strftime('%Y/%m/%d')
+        if filename:
+            return f'notes_to_file/{today}/{filename}'
+        return f'notes_to_file/{today}/'
     
-#     def upload_to_path(instance, filename):
-#         today = get_utcnow().date().strftime('%Y/%m/%d')
-#         if filename:
-#             return f'notes_to_file/{today}/{filename}'
-#         return f'notes_to_file/{today}/'
-
+    file_save = models.FileField(upload_to='note_to_file/', blank=True, null=True)
+    
+    objects = NoteToFileDocsManager()
+    
+    def natural_key(self):
+        return (self.note_to_file,)
+    
 #     user_uploaded = models.CharField(
 #         max_length=50,
 #         blank=True,
@@ -93,10 +104,10 @@ class NoteToFile(SiteModelMixin,BaseUuidModel):
 #     datetime_captured = models.DateTimeField(
 #         default=get_utcnow)
 
-#     def ntf_document(self):
-#             return mark_safe(
-#                 '<embed src="%(url)s" style="border:none" height="100" width="150"'
-#                 'title="note to file"></embed>' % {'url': self.file_save.url})
+    def ntf_document(self):
+            return mark_safe(
+                '<embed src="%(url)s" style="border:none" height="100" width="150"'
+                'title="note to file"></embed>' % {'url': self.file_save.url})
 
-#     ntf_document.short_description = 'Preview'
-#     ntf_document.allow_tags = True        
+    ntf_document.short_description = 'Preview'
+    ntf_document.allow_tags = True        
