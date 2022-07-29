@@ -3,6 +3,8 @@ from edc_base.utils import get_utcnow
 from edc_base.model_validators.date import datetime_not_future
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_base.model_mixins import BaseUuidModel
+from .model_mixins import SearchSlugModelMixin
+from edc_base.model_managers import HistoricalRecords
 
 
 from edc_search.model_mixins import SearchSlugManager
@@ -15,7 +17,9 @@ class ProtocolDeviationsManager(SearchSlugManager, models.Manager):
     def get_by_natural_key(self, deviation_name):
         return self.get(deviation_name=deviation_name)
 
-class ProtocolDeviations(SiteModelMixin,BaseUuidModel):
+class ProtocolDeviations(SearchSlugModelMixin,
+                         SiteModelMixin,
+                         BaseUuidModel):
     """A model for protocol deviations
     """
     
@@ -57,6 +61,9 @@ class ProtocolDeviations(SiteModelMixin,BaseUuidModel):
         verbose_name='Comments',
         blank=True,
         null=True)
+    
+    
+    history = HistoricalRecords()
     
     objects = ProtocolDeviationsManager()
     

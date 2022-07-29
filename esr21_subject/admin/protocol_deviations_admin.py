@@ -34,6 +34,8 @@ class ProtocolDeviationsAdmin(ModelAdminMixin, admin.ModelAdmin):
     list_display = [
         'created', 'deviation_name','esr21_form_name','deviation_form_name']
     
+    search_fields = ('deviation_name',)
+    
     def get_form(self, request, obj=None, *args, **kwargs):
         
         form = super().get_form(request, *args, **kwargs)
