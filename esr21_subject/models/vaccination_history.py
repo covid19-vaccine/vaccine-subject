@@ -1,3 +1,5 @@
+from msilib.schema import AdminExecuteSequence
+from xml.dom import ValidationErr
 from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_identifier.model_mixins import UniqueSubjectIdentifierModelMixin
@@ -67,6 +69,21 @@ class VaccinationHistory(UniqueSubjectIdentifierModelMixin, SiteModelMixin,
 
     dose2_date = models.DateField(
         verbose_name='Date of vaccine dose 2',
+        validators=[date_not_future, ],
+        blank=True,
+        null=True, )
+    
+    dose3_product_name = models.CharField(
+        verbose_name='Product name of COVID-19 vaccine dose 3',
+        choices=COVID_PRODUCT_NAME,
+        max_length=12,
+        blank=True,
+        null=True, )
+
+    dose3_product_other = OtherCharField()
+
+    dose3_date = models.DateField(
+        verbose_name='Date of vaccine dose 3',
         validators=[date_not_future, ],
         blank=True,
         null=True, )
