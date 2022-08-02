@@ -1,5 +1,3 @@
-from msilib.schema import AdminExecuteSequence
-from xml.dom import ValidationErr
 from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_identifier.model_mixins import UniqueSubjectIdentifierModelMixin
