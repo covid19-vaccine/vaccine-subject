@@ -48,10 +48,6 @@ class ProtocolDeviations(SearchSlugModelMixin,
         verbose_name='Deviation Description',
      )
     
-    esr21_form_name = models.CharField(
-        verbose_name='Form\'s that have deviations',
-        max_length=200,)
-    
     deviation_form_name = models.CharField(
         verbose_name='Form\'s that have deviations',
         max_length=200,)
@@ -74,6 +70,11 @@ class ProtocolDeviations(SearchSlugModelMixin,
         return (self.deviation_name,)
 
     natural_key.dependencies = ['sites.Site']
+    
+    def get_search_slug_fields(self):
+        fields=[]
+        fields.append('deviation_name')
+        return fields 
     
     class Meta:
         app_label = 'esr21_subject'

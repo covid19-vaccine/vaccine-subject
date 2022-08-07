@@ -21,7 +21,6 @@ class ProtocolDeviationsAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'subject_identifiers',
                 'deviation_name',
                 'deviation_description',
-                'esr21_form_name',
                 'deviation_form_name',
                 'comment',
             ),
@@ -32,7 +31,7 @@ class ProtocolDeviationsAdmin(ModelAdminMixin, admin.ModelAdmin):
     filter_horizontal = ('subject_identifiers',)
         
     list_display = [
-        'created', 'deviation_name','esr21_form_name','deviation_form_name']
+        'created', 'deviation_name','deviation_form_name']
     
     search_fields = ('deviation_name',)
     
