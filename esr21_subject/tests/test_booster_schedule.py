@@ -6,7 +6,6 @@ from edc_constants.constants import YES, NO, FEMALE, OMANG
 from edc_facility.import_holidays import import_holidays
 from edc_metadata.models import CrfMetadata
 from edc_metadata.constants import REQUIRED, NOT_REQUIRED
-from edc_visit_schedule.models import SubjectScheduleHistory
 from esr21_subject.helper_classes import EnrollmentHelper
 from django.apps import apps as django_apps
 
@@ -30,7 +29,7 @@ class TestBoosterScheduleSetup(TestCase):
         self.consent_options = {
             'screening_identifier': self.eligibility.screening_identifier,
             'consent_datetime': get_utcnow(),
-            'version': 1,
+            'version': 3,
             'dob': (get_utcnow() - relativedelta(years=45)).date(),
             'first_name': 'TEST ONE',
             'last_name': 'TEST',

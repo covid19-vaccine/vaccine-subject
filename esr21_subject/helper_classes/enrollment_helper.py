@@ -24,50 +24,57 @@ class EnrollmentHelper(object):
         except ObjectDoesNotExist:
             pass
         else:
+            onschedule_dt = vaccination_history.created.replace(microsecond=0)
             if vaccination_history.received_vaccine == YES:
-                dose_recieved = vaccination_history.dose1_product_name
                 if vaccination_history.dose_quantity == '1':
                     self.put_on_schedule(
                         f'{self.cohort}_fu_schedule3',
                         onschedule_model=onschedule_model,
-                        onschedule_datetime=vaccination_history.created.replace(microsecond=0))
+                        base_appt_datetime=onschedule_dt,
+                        onschedule_datetime=onschedule_dt)
 
                     booster_dt = vaccination_history.created + relativedelta(days=100)
                     self.put_on_schedule(
                         f'{self.cohort}_boost_schedule',
                         onschedule_model=onschedule_model,
-                        onschedule_datetime=booster_dt.replace(microsecond=0))
+                        base_appt_datetime=booster_dt.replace(microsecond=0),
+                        onschedule_datetime=onschedule_dt)
 
                 elif vaccination_history.dose_quantity == '2':
                     self.put_on_schedule(
                         f'{self.cohort}_boost_schedule',
                         onschedule_model=onschedule_model,
-                        onschedule_datetime=vaccination_history.created.replace(microsecond=0))
+                        base_appt_datetime=onschedule_dt,
+                        onschedule_datetime=onschedule_dt)
             else:
                 self.put_on_schedule(
                     f'{self.cohort}_enrol_schedule3',
                     onschedule_model=onschedule_model,
-                    onschedule_datetime=vaccination_history.created.replace(microsecond=0))
+                    base_appt_datetime=onschedule_dt,
+                    onschedule_datetime=onschedule_dt)
 
                 # Schedule second dose, 70days after dose 1 schedule
                 second_dose_dt = vaccination_history.created + relativedelta(days=70)
                 self.put_on_schedule(
                     f'{self.cohort}_fu_schedule3',
                     onschedule_model=onschedule_model,
-                    onschedule_datetime=second_dose_dt.replace(microsecond=0))
+                    base_appt_datetime=second_dose_dt.replace(microsecond=0),
+                    onschedule_datetime=onschedule_dt)
 
                 # Schedule booster, 170days after dose 1 schedule
                 booster_dt = vaccination_history.created + relativedelta(days=170)
                 self.put_on_schedule(
                     f'{self.cohort}_boost_schedule',
                     onschedule_model=onschedule_model,
-                    onschedule_datetime=booster_dt.replace(microsecond=0))
+                    base_appt_datetime=booster_dt.replace(microsecond=0),
+                    onschedule_datetime=onschedule_dt)
 
     def put_on_schedule(self, schedule_name, onschedule_model,
-                        onschedule_datetime=None):
+                        base_appt_datetime=None, onschedule_datetime=None):
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)
         schedule.put_on_schedule(
             subject_identifier=self.subject_identifier,
             onschedule_datetime=onschedule_datetime,
+            base_appt_datetime=base_appt_datetime,
             schedule_name=schedule_name)

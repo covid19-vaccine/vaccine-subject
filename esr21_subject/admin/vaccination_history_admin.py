@@ -25,6 +25,9 @@ class VaccinationHistoryAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'dose2_product_name',
                 'dose2_product_other',
                 'dose2_date',
+                'dose3_product_name',
+                'dose3_product_other',
+                'dose3_date',
                 'source_of_info'
             )}),
         audit_fieldset_tuple)
@@ -38,5 +41,6 @@ class VaccinationHistoryAdmin(ModelAdminMixin, admin.ModelAdmin):
         'dose_quantity': admin.VERTICAL,
         'dose1_product_name': admin.VERTICAL,
         'dose2_product_name': admin.VERTICAL,
+        'dose3_product_name': admin.VERTICAL,
         'source_of_info': admin.VERTICAL
     }

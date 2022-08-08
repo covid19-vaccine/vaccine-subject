@@ -1,3 +1,5 @@
+from django import forms
+from django.apps import apps as django_apps
 from django.db import models
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
@@ -27,6 +29,22 @@ class OffSchedule(OffScheduleModelMixin, BaseUuidModel):
 
     def take_off_schedule(self):
         pass
+
+    @property
+    def latest_consent_obj_version(self):
+        caregiver_consent_cls = django_apps.get_model('esr21_subject.informedconsent')
+
+        subject_consents = caregiver_consent_cls.objects.filter(
+            subject_identifier=self.subject_identifier)
+        if subject_consents:
+            latest_consent = subject_consents.latest('consent_datetime')
+            return latest_consent.version
+        else:
+            raise forms.ValidationError('Missing Subject Consent form, cannot proceed.')
+
+    def save(self, *args, **kwargs):
+        self.consent_version = self.latest_consent_obj_version
+        super().save(*args, **kwargs)
 
     class Meta:
         unique_together = ('subject_identifier', 'offschedule_datetime')

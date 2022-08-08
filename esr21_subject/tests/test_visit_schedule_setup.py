@@ -2,7 +2,7 @@ from django.test import TestCase, tag
 from edc_appointment.constants import COMPLETE_APPT
 from edc_appointment.models import Appointment
 from edc_base.utils import get_utcnow
-from edc_constants.constants import YES, NO
+from edc_constants.constants import YES, NO, OMANG, FEMALE
 from edc_facility.import_holidays import import_holidays
 from edc_visit_tracking.constants import SCHEDULED
 from model_mommy import mommy
@@ -22,19 +22,32 @@ class TestVisitScheduleSetup(TestCase):
 
         self.enrol_helper = EnrollmentHelper
 
-        mommy.make_recipe(
+        eligibility = mommy.make_recipe(
             'esr21_subject.eligibilityconfirmation',)
 
-        consent = mommy.make_recipe(
+        self.consent_options = {
+            'screening_identifier': eligibility.screening_identifier,
+            'consent_datetime': get_utcnow(),
+            'version': 3,
+            'dob': (get_utcnow() - relativedelta(years=45)).date(),
+            'first_name': 'TEST ONE',
+            'last_name': 'TEST',
+            'initials': 'TOT',
+            'identity': '123425678',
+            'confirm_identity': '123425678',
+            'identity_type': OMANG,
+            'gender': FEMALE}
+
+        self.consent = mommy.make_recipe(
             'esr21_subject.informedconsent',
-            subject_identifier='123-9876')
+            **self.consent_options)
 
         mommy.make_recipe(
             'esr21_subject.screeningeligibility',
-            subject_identifier=consent.subject_identifier,
+            subject_identifier=self.consent.subject_identifier,
             is_eligible=True)
 
-        self.subject_identifier = consent.subject_identifier
+        self.subject_identifier = self.consent.subject_identifier
 
         mommy.make_recipe(
             'esr21_subject.vaccinationhistory',
@@ -71,6 +84,7 @@ class TestVisitScheduleSetup(TestCase):
         consent = mommy.make_recipe(
             'esr21_subject.informedconsent',
             screening_identifier=eligibility.screening_identifier,
+            version=3,
             subject_identifier='123-9871')
 
         mommy.make_recipe(
@@ -101,7 +115,6 @@ class TestVisitScheduleSetup(TestCase):
             subject_identifier=consent.subject_identifier,
             schedule_name='esr21_sub_boost_schedule').count(), 1)
 
-    @tag('vsxxx')
     def test_maincohort_appts_created(self):
         """Assert that four appointments were created"""
         cohort = 'esr21'
@@ -116,19 +129,28 @@ class TestVisitScheduleSetup(TestCase):
         self.assertEqual(Appointment.objects.get(
             subject_identifier=self.subject_identifier,
             schedule_name='esr21_enrol_schedule3',
-            visit_code='1000').timepoint_datetime, get_utcnow().replace(microsecond=0))
+            visit_code='1000').timepoint_datetime.date(),
+            get_utcnow().date())
+
+        self.assertEqual(Appointment.objects.filter(
+            subject_identifier=self.subject_identifier,
+            schedule_name='esr21_fu_schedule3').count(), 2)
 
         self.assertEqual(Appointment.objects.get(
             subject_identifier=self.subject_identifier,
             schedule_name='esr21_fu_schedule3',
-            visit_code='1070').timepoint_datetime,
-            (get_utcnow() + relativedelta(days=70)).replace(microsecond=0))
+            visit_code='1070').timepoint_datetime.date(),
+            (get_utcnow().date() + relativedelta(days=70)))
+
+        self.assertEqual(Appointment.objects.filter(
+            subject_identifier=self.subject_identifier,
+            schedule_name='esr21_boost_schedule').count(), 4)
 
         self.assertEqual(Appointment.objects.get(
             subject_identifier=self.subject_identifier,
             schedule_name='esr21_boost_schedule',
-            visit_code='1170').timepoint_datetime,
-            (get_utcnow() + relativedelta(days=170)).replace(microsecond=0))
+            visit_code='1170').timepoint_datetime.date(),
+            (get_utcnow().date() + relativedelta(days=170)))
 
 #     @tag('vs1')
 #     def test_illness_onschedule(self):
