@@ -10,7 +10,6 @@ class NoteToFileForm(forms.ModelForm):
         model = NoteToFile
         fields = '__all__'
         
-        
 class NoteToFileDocsForm(forms.ModelForm): 
     
     def has_changed(self):

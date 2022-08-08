@@ -7,16 +7,18 @@ from django.utils.html import mark_safe
 from edc_base.sites import SiteModelMixin
 from edc_base.model_mixins import BaseUuidModel
 
+from .model_mixins import SearchSlugModelMixin
 from edc_search.model_mixins import SearchSlugManager
 from .list_models import SubjectIdentifiers
 
 
-class NoteToFileManager(models.Manager):
+class NoteToFileManager(SearchSlugManager,models.Manager):
 
     def get_by_natural_key(self, note_name):
         return self.get(note_name=note_name)
 
-class NoteToFile(SiteModelMixin,BaseUuidModel):
+class NoteToFile(SearchSlugModelMixin,
+                 SiteModelMixin,BaseUuidModel):
     
     """A model for note to files
     """
@@ -65,11 +67,15 @@ class NoteToFile(SiteModelMixin,BaseUuidModel):
     
     # natural_key.dependencies = ['sites.Site']
     
+    def get_search_slug_fields(self):
+        fields = []
+        fields.append('note_name')
+        return fields
+        
     class Meta:
         app_label = 'esr21_subject'
         verbose_name = 'Note to file'
         verbose_name_plural = 'Notes to file'
-        
         
         
 class NoteToFileDocsManager(models.Manager):
@@ -96,13 +102,13 @@ class NoteToFileDocs(BaseUuidModel):
     def natural_key(self):
         return (self.note_to_file,)
     
-#     user_uploaded = models.CharField(
-#         max_length=50,
-#         blank=True,
-#         verbose_name='user uploaded',)
+    user_uploaded = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name='user uploaded',)
 
-#     datetime_captured = models.DateTimeField(
-#         default=get_utcnow)
+    datetime_captured = models.DateTimeField(
+        default=get_utcnow)
 
     def ntf_document(self):
             return mark_safe(

@@ -21,7 +21,7 @@ class NoteToFileDocsInline(TabularInlineMixin, admin.TabularInline):
 
     def get_readonly_fields(self, request, obj=None):
         fields = super().get_readonly_fields(request, obj)
-        fields = ('ntf_document',) + fields
+        fields = ('ntf_document','user_uploaded','datetime_captured',) + fields
 
         return fields
 
@@ -49,4 +49,6 @@ class NoteToFileAdmin(ModelAdminMixin, admin.ModelAdmin):
     list_display = ('report_datetime', 'note_name',)
     
     filter_horizontal = ('subject_identifiers',)
+    
+    search_fields = ('note_name',)
     
