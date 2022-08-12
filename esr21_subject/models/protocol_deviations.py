@@ -32,9 +32,10 @@ class ProtocolDeviations(SearchSlugModelMixin,
         help_text=('If reporting today, use today\'s date/time, otherwise use '
                     'the date/time this information was reported.'))
     
-    deviation_name = models.TextField(
+    deviation_name = models.CharField(
         max_length=250,
         verbose_name='Deviation',
+        unique=True,
       )
     
     subject_identifiers = models.ManyToManyField(
@@ -58,7 +59,6 @@ class ProtocolDeviations(SearchSlugModelMixin,
         blank=True,
         null=True)
     
-    
     history = HistoricalRecords()
     
     objects = ProtocolDeviationsManager()
@@ -72,9 +72,7 @@ class ProtocolDeviations(SearchSlugModelMixin,
     natural_key.dependencies = ['sites.Site']
     
     def get_search_slug_fields(self):
-        fields=[]
-        fields.append('deviation_name')
-        return fields 
+        return ['deviation_name']
     
     class Meta:
         app_label = 'esr21_subject'

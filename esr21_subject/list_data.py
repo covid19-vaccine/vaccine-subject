@@ -116,7 +116,7 @@ list_data = {
 }
 
 id_list = []
-for a in RegisteredSubject.objects.all()[:10].values_list('subject_identifier',flat=True):
+for a in RegisteredSubject.objects.all().values_list('subject_identifier',flat=True):
     id_list.append((a, a))
 
 list_data.update({'esr21_subject.subjectidentifiers': id_list})
