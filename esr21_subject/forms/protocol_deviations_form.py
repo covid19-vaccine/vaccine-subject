@@ -2,7 +2,6 @@ from django import forms
 from django.apps import apps as django_apps
 from ..models import ProtocolDeviations
 from esr21_subject_validation.form_validators import ProtocolDeviationFormValidator
-import ast
 class ProtocolDeviationsForm(forms.ModelForm):
     
     
