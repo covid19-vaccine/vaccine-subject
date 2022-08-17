@@ -100,14 +100,15 @@ def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
         except InformedConsent.DoesNotExist:
             pass
         else:
-            consent.is_duplicate = True
-            consent.save_base(raw=True)
-            try:
-                registered_subject = RegisteredSubject.objects.get(
-                    identity=consent.identity)
-            except RegisteredSubject.DoesNotExist:
-                pass
-            else:
-                registered_subject.identity = None
-                registered_subject.identity_or_pk = get_uuid()
-                registered_subject.save()
+            if consent.screened_out:
+                consent.is_duplicate = True
+                consent.save_base(raw=True)
+                try:
+                    registered_subject = RegisteredSubject.objects.get(
+                        identity=consent.identity)
+                except RegisteredSubject.DoesNotExist:
+                    pass
+                else:
+                    registered_subject.identity = None
+                    registered_subject.identity_or_pk = get_uuid()
+                    registered_subject.save()
