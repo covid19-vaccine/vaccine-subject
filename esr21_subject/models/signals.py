@@ -7,6 +7,7 @@ from edc_base.utils import get_uuid
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_registration.models import RegisteredSubject
 from .informed_consent import InformedConsent
+from .screening_eligibility import ScreeningEligibility
 
 
 
@@ -94,6 +95,14 @@ def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
     if not raw and created:
         subject_identifier = instance.subject_identifier
         identity = instance.identity
+        try:
+            screening_eligibility = ScreeningEligibility.objects.get(
+                screening_identifier=instance.screening_identifier)
+        except ScreeningEligibility.DoesNotExist:
+            pass
+        else:
+            screening_eligibility.subject_identifier = subject_identifier
+            screening_eligibility.save_base(raw=True)
         try:
             consent = InformedConsent.objects.filter(identity=identity).exclude(
                 subject_identifier=subject_identifier).latest('-created')
