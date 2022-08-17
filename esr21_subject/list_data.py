@@ -1,6 +1,7 @@
 from edc_constants.constants import OTHER, NOT_APPLICABLE
 
 from edc_list_data import PreloadData
+from edc_registration.models import RegisteredSubject
 
 list_data = {
     'esr21_subject.saecriteria': [
@@ -105,9 +106,20 @@ list_data = {
         ('obesity', 'Obesity'),
         (OTHER, 'Other'),
         (NOT_APPLICABLE, 'Not Applicable')
+    ],
+    'esr21_subject.subjectidentifiers':[
+        
     ]
+    
+    
 
 }
+
+id_list = []
+for a in RegisteredSubject.objects.all().values_list('subject_identifier',flat=True):
+    id_list.append((a, a))
+
+list_data.update({'esr21_subject.subjectidentifiers': id_list})
 
 preload_data = PreloadData(
     list_data=list_data)

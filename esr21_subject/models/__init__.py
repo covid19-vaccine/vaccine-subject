@@ -30,3 +30,6 @@ from .vaccination_history import VaccinationHistory
 from .vital_signs import VitalSigns
 from .model_mixins import ConsentVersionModelModelMixin
 from .signals import informed_consent_on_post_save
+from .protocol_deviations import ProtocolDeviations
+from .note_to_file import NoteToFile
+from .note_to_file import NoteToFileDocs

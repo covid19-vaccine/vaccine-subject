@@ -109,6 +109,7 @@ COVID_INFO_SOURCE = (
 DOSE_QUANTITY = (
     ('1', '1'),
     ('2', '2'),
+    ('3', '3'),
 )
 
 EMPLOYMENT_STATUS = (
@@ -466,3 +467,4 @@ BIRTH_METHODS = (
     ('c_section', 'C-Section'),
     ('vaginal', 'Vaginal'),
 )
+

@@ -70,6 +70,21 @@ class VaccinationHistory(UniqueSubjectIdentifierModelMixin, SiteModelMixin,
         validators=[date_not_future, ],
         blank=True,
         null=True, )
+    
+    dose3_product_name = models.CharField(
+        verbose_name='Product name of COVID-19 vaccine dose 3',
+        choices=COVID_PRODUCT_NAME,
+        max_length=12,
+        blank=True,
+        null=True, )
+
+    dose3_product_other = OtherCharField()
+
+    dose3_date = models.DateField(
+        verbose_name='Date of vaccine dose 3',
+        validators=[date_not_future, ],
+        blank=True,
+        null=True, )
 
     source_of_info = models.CharField(
         verbose_name='Primary source of information',

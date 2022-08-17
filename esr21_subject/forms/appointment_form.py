@@ -28,14 +28,14 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
 
             appt_date = cleaned_data.get('appt_datetime').date()
 
-            if ((appt_date < earliest_appt_date or appt_date > latest_appt_date)
-                    and self.instance.visit_code in ['1070']):
+            if (appt_date < earliest_appt_date and
+                    self.instance.visit_code in ['1070', '1170']):
                 earliest_appt_date = earliest_appt_date.strftime('%Y-%m-%d')
                 latest_appt_date = latest_appt_date.strftime('%Y-%m-%d')
                 raise forms.ValidationError(
                     'The appointment datetime cannot be outside the window period,'
-                    f' "{earliest_appt_date} to {latest_appt_date}" '
-                    'please correct. See earliest, ideal and latest datetime.')
+                    f' "{earliest_appt_date} to {latest_appt_date}" please '
+                    'correct. See earliest, ideal and latest datetime.')
         super().clean()
 
     class Meta:
