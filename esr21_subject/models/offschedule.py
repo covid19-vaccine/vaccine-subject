@@ -33,7 +33,6 @@ class OffSchedule(OffScheduleModelMixin, BaseUuidModel):
     @property
     def latest_consent_obj_version(self):
         caregiver_consent_cls = django_apps.get_model('esr21_subject.informedconsent')
-
         subject_consents = caregiver_consent_cls.objects.filter(
             subject_identifier=self.subject_identifier)
         if subject_consents:

@@ -3,7 +3,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_appointment.constants import COMPLETE_APPT
 from edc_appointment.models.appointment import Appointment
+from edc_base.utils import get_uuid
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from edc_registration.models import RegisteredSubject
+from .informed_consent import InformedConsent
+
+
 
 from .adverse_event import AdverseEventRecord
 from .onschedule import OnSchedule
@@ -90,9 +95,8 @@ def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
         subject_identifier = instance.subject_identifier
         identity = instance.identity
         try:
-            consent = InformedConsent.objects.filter(
-                Q(subject_identifier != subject_identifier) and
-                Q(identity=identity)).latest('-created')
+            consent = InformedConsent.objects.filter(identity=identity).exclude(
+                subject_identifier=subject_identifier).latest('-created')
         except InformedConsent.DoesNotExist:
             pass
         else:
