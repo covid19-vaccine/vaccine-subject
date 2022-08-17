@@ -141,4 +141,4 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
         unique_together = (
             ('subject_identifier', 'version'),
             ('subject_identifier', 'screening_identifier', 'version'),
-            ('first_name', 'dob', 'initials', 'version'))
+            ('subject_identifier', 'first_name', 'dob', 'initials', 'version'))
