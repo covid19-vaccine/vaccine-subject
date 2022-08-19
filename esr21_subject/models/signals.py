@@ -3,7 +3,13 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_appointment.constants import COMPLETE_APPT
 from edc_appointment.models.appointment import Appointment
+from edc_base.utils import get_uuid
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from edc_registration.models import RegisteredSubject
+from .informed_consent import InformedConsent
+from .screening_eligibility import ScreeningEligibility
+
+
 
 from .adverse_event import AdverseEventRecord
 from .onschedule import OnSchedule
@@ -90,18 +96,28 @@ def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
         subject_identifier = instance.subject_identifier
         identity = instance.identity
         try:
-            consent = InformedConsent.objects.filter(
-                Q(subject_identifier != subject_identifier) and
-                Q(identity=identity)).latest('-created')
+            screening_eligibility = ScreeningEligibility.objects.get(
+                screening_identifier=instance.screening_identifier)
+        except ScreeningEligibility.DoesNotExist:
+            pass
+        else:
+            screening_eligibility.subject_identifier = subject_identifier
+            screening_eligibility.save_base(raw=True)
+        try:
+            consent = InformedConsent.objects.filter(identity=identity).exclude(
+                subject_identifier=subject_identifier).latest('-created')
         except InformedConsent.DoesNotExist:
             pass
         else:
-            try:
-                registered_subject = RegisteredSubject.objects.get(
-                    identity=consent.identity)
-            except RegisteredSubject.DoesNotExist:
-                pass
-            else:
-                registered_subject.identity = None
-                registered_subject.identity_or_pk = get_uuid()
-                registered_subject.save()
+            if consent.screened_out:
+                consent.is_duplicate = True
+                consent.save()
+                try:
+                    registered_subject = RegisteredSubject.objects.get(
+                        identity=consent.identity)
+                except RegisteredSubject.DoesNotExist:
+                    pass
+                else:
+                    registered_subject.identity = None
+                    registered_subject.identity_or_pk = get_uuid()
+                    registered_subject.save()

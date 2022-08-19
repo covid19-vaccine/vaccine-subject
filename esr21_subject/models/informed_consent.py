@@ -54,8 +54,13 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
         verbose_name='Screening identifier',
         max_length=50)
 
-    screening_failure = models.BooleanField(
-        verbose_name='screening failure',
+    screened_out = models.BooleanField(
+        verbose_name='screened out',
+        default=False,
+    )
+
+    is_duplicate = models.BooleanField(
+        verbose_name='informed consent duplicate',
         default=False,
     )
 
@@ -136,4 +141,4 @@ class InformedConsent(ConsentModelMixin, SiteModelMixin,
         unique_together = (
             ('subject_identifier', 'version'),
             ('subject_identifier', 'screening_identifier', 'version'),
-            ('screening_failure', 'first_name', 'dob', 'initials', 'version'))
+            ('subject_identifier', 'first_name', 'dob', 'initials', 'version'))

@@ -47,3 +47,7 @@ class Diseases(ListModelMixin, BaseUuidModel):
 
 class Symptoms(ListModelMixin, BaseUuidModel):
     pass
+
+
+class SubjectIdentifiers(ListModelMixin, BaseUuidModel):
+    pass
