@@ -89,6 +89,7 @@ class TestPregOutcome(TestCase):
             'esr21_subject.pregnancytest',
             subject_visit=self.subject_visit,
             preg_performed=YES,
+            preg_date=get_utcnow(),
             result=POS)
 
         day_28_follow = mommy.make_recipe(
@@ -103,6 +104,7 @@ class TestPregOutcome(TestCase):
             'esr21_subject.pregnancytest',
             subject_visit=day_28_follow,
             preg_performed=YES,
+            preg_date=get_utcnow(),
             result=NEG)
 
         self.assertEqual(
@@ -112,17 +114,23 @@ class TestPregOutcome(TestCase):
                 visit_code='1028',
                 visit_code_sequence='0').entry_status, REQUIRED)
 
+        mommy.make_recipe(
+            'esr21_subject.pregoutcome',
+            report_datetime=get_utcnow(),
+            subject_visit=day_28_follow,)
+
         day_70_visit = mommy.make_recipe(
             'esr21_subject.subjectvisit',
             appointment=Appointment.objects.get(
                 visit_code='1070',
                 subject_identifier=self.subject_identifier),
-            report_datetime=get_utcnow() + relativedelta(days=70),
+            report_datetime=get_utcnow() + relativedelta(days=2),
             reason=SCHEDULED)
 
         mommy.make_recipe(
             'esr21_subject.pregnancytest',
             subject_visit=day_70_visit,
+            preg_date=get_utcnow() + relativedelta(days=2),
             result=NEG)
 
         self.assertEqual(

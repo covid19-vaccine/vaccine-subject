@@ -6,7 +6,7 @@ from model_mommy.recipe import Recipe, seq
 
 from .models import (Covid19SymptomaticInfections, OffSchedule,
                      PregnancyStatus, Covid19Results, VaccinationHistory, PregnancyTest,
-                     MedicalHistory, MedicalDiagnosis)
+                     MedicalHistory, MedicalDiagnosis, PregOutcome)
 from .models import EligibilityConfirmation, InformedConsent, SubjectVisit
 from .models import RapidHIVTesting, OffScheduleIll, ScreeningEligibility
 
@@ -54,6 +54,10 @@ pregnancystatus = Recipe(
 
 pregnancytest = Recipe(
     PregnancyTest,
+)
+
+pregoutcome = Recipe(
+    PregOutcome,
 )
 
 covid19symptomaticinfections = Recipe(

@@ -6,10 +6,10 @@ from edc_appointment.models.appointment import Appointment
 from edc_base.utils import get_uuid
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_registration.models import RegisteredSubject
+
+from . import EligibilityConfirmation
 from .informed_consent import InformedConsent
 from .screening_eligibility import ScreeningEligibility
-
-
 
 from .adverse_event import AdverseEventRecord
 from .onschedule import OnSchedule
@@ -18,7 +18,7 @@ from .onschedule import OnSchedule
 @receiver(post_save, weak=False, sender=AdverseEventRecord,
           dispatch_uid="metadata_update_on_post_save")
 def metadata_update_on_post_save(sender, instance, raw, created, using,
-                                 update_fields, **kwargs):
+        update_fields, **kwargs):
     """Update the meta data record on post save of a CRF model.
     """
 
@@ -38,15 +38,17 @@ def metadata_update_on_post_save(sender, instance, raw, created, using,
                 instance.adverse_event.run_metadata_rules_for_crf()
 
 
-@receiver(post_save, weak=False, sender=Appointment, dispatch_uid='appointment_on_post_save')
+@receiver(post_save, weak=False, sender=Appointment,
+          dispatch_uid='appointment_on_post_save')
 def appointment_on_post_save(sender, instance, raw, created, **kwargs):
-
     if not raw:
-        if (instance.visit_code == '2028' and instance.schedule_name == 'esr21_illness_schedule'
+        if (
+                instance.visit_code == '2028' and instance.schedule_name == 'esr21_illness_schedule'
                 and instance.appt_status == COMPLETE_APPT):
 
             _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
-                onschedule_model='esr21_subject.onscheduleill', name=instance.schedule_name)
+                onschedule_model='esr21_subject.onscheduleill',
+                name=instance.schedule_name)
 
             schedule.take_off_schedule(subject_identifier=instance.subject_identifier)
 
@@ -61,8 +63,8 @@ def appointment_on_post_save(sender, instance, raw, created, **kwargs):
                 latest_offschedule.save()
 
 
-def put_on_schedule(schedule_name, onschedule_model, instance=None, onschedule_datetime=None):
-
+def put_on_schedule(schedule_name, onschedule_model, instance=None,
+        onschedule_datetime=None):
     if instance:
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)
@@ -76,17 +78,17 @@ def put_on_schedule(schedule_name, onschedule_model, instance=None, onschedule_d
 def refresh_schedule(schedule_name, onschedule_model, instance=None):
     if instance:
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
-                    onschedule_model=onschedule_model,
-                    name=schedule_name)
+            onschedule_model=onschedule_model,
+            name=schedule_name)
         schedule.refresh_schedule(
             subject_identifier=instance.subject_identifier)
 
 
 def is_subcohort_full():
-        onschedule_subcohort = OnSchedule.objects.filter(
-            schedule_name='esr21_sub_enrol_schedule')
+    onschedule_subcohort = OnSchedule.objects.filter(
+        schedule_name='esr21_sub_enrol_schedule')
 
-        return onschedule_subcohort.count() == 3000
+    return onschedule_subcohort.count() == 3000
 
 
 @receiver(post_save, weak=False, sender=InformedConsent,
@@ -96,9 +98,9 @@ def informed_consent_on_post_save(sender, instance, raw, created, **kwargs):
         subject_identifier = instance.subject_identifier
         identity = instance.identity
         try:
-            screening_eligibility = ScreeningEligibility.objects.get(
+            screening_eligibility = EligibilityConfirmation.objects.get(
                 screening_identifier=instance.screening_identifier)
-        except ScreeningEligibility.DoesNotExist:
+        except EligibilityConfirmation.DoesNotExist:
             pass
         else:
             screening_eligibility.subject_identifier = subject_identifier
