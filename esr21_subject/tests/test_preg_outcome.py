@@ -139,13 +139,14 @@ class TestPregOutcome(TestCase):
             appointment=Appointment.objects.get(
                 visit_code='1070',
                 subject_identifier=self.subject_identifier),
-            report_datetime=get_utcnow() + relativedelta(days=3),
+            report_datetime=get_utcnow() + relativedelta(days=5),
             reason=SCHEDULED)
 
         mommy.make_recipe(
             'esr21_subject.pregnancytest',
             subject_visit=day_70_visit,
-            preg_date=get_utcnow() + relativedelta(days=3),
+            preg_date=get_utcnow() + relativedelta(days=5),
+            preg_performed=YES,
             result=NEG)
 
         self.assertEqual(
