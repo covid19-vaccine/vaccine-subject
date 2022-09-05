@@ -25,3 +25,5 @@ from .vaccination_history_admin import VaccinationHistoryAdmin
 from .vital_signs_admin import VitalSignsAdmin
 from .protocol_deviations_admin import ProtocolDeviationsAdmin
 from .note_to_file_admin import NoteToFileAdmin
+# screen out
+from .screen_out_admin import ScreenOutAdmin

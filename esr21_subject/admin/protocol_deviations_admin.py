@@ -42,7 +42,8 @@ class ProtocolDeviationsAdmin(ModelAdminMixin, admin.ModelAdmin):
         esr21_subject = apps.get_app_config('esr21_subject')
         
         esr21_models = {
-            model._meta.verbose_name: model._meta.label_lower for model in esr21_subject.get_models() if not model.__name__.__contains__('Historical') or model.__module__.__contains__('list_model')
+            model._meta.verbose_name: model._meta.label_lower for model in esr21_subject.get_models() 
+            if not model.__name__.__contains__('Historical') or model.__module__.__contains__('list_model')
         }
         form_choices =()
         model_key = ((val.lower(),key) for key,val in esr21_models.items() if 'list_model' not in val)
