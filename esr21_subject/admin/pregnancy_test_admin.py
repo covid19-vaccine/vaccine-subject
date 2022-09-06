@@ -22,6 +22,10 @@ class PregnancyTestAdmin(CrfModelAdminMixin, admin.ModelAdmin):
                 'result',)}),
         audit_fieldset_tuple)
 
+    list_display = ('preg_performed','preg_date','result')
+
+    list_filter = ('result',)
+
     radio_fields = {'preg_performed': admin.VERTICAL,
                     'preg_test_type': admin.VERTICAL,
                     'result': admin.VERTICAL, }

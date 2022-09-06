@@ -29,7 +29,7 @@ from .vaccination_details import VaccinationDetails
 from .vaccination_history import VaccinationHistory
 from .vital_signs import VitalSigns
 from .model_mixins import ConsentVersionModelModelMixin
-from .protocol_deviations import ProtocolDeviations
+from .signals import informed_consent_on_post_save
 from .note_to_file import NoteToFile
 from .note_to_file import NoteToFileDocs
 # screenout

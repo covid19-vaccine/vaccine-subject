@@ -27,7 +27,6 @@ from .targeted_physical_examination_form import TargetedPhysicalExaminationForm
 from .vaccination_details_form import VaccinationDetailsForm
 from .vaccination_history_form import VaccinationHistoryForm
 from .vital_signs_form import VitalSignsForm
-from .protocol_deviations_form import ProtocolDeviationsForm
 from .note_to_file_form import NoteToFileForm
 from .note_to_file_form import  NoteToFileDocsForm
 # screenout form

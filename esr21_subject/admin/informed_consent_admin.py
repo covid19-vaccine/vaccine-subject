@@ -149,7 +149,7 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
             consent_actions = [
                 flag_as_verified_against_paper,
                 unflag_as_verified_against_paper,
-                update_screening_failure, ]
+                update_screened_out]
 
             # Add actions from this ModelAdmin.
             actions = (self.get_action(action) for action in consent_actions)
@@ -214,9 +214,9 @@ class InformedConsentAdmin(ModelAdminBasicMixin, ModelAdminMixin,
         return extra_context
 
 
-def update_screening_failure(modeladmin, request, queryset, **kwargs):
+def update_screened_out(modeladmin, request, queryset, **kwargs):
     for consent_obj in queryset:
-        consent_obj.screening_failure = True
+        consent_obj.screened_out = True
         consent_obj.save()
         messages.add_message(
             request,

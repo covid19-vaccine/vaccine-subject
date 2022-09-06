@@ -85,11 +85,21 @@ class TestPregOutcome(TestCase):
                 visit_code='1000',
                 visit_code_sequence='0').entry_status, REQUIRED)
 
-        mommy.make_recipe(
+        day_one_test = mommy.make_recipe(
             'esr21_subject.pregnancytest',
             subject_visit=self.subject_visit,
             preg_performed=YES,
-            result=POS)
+            preg_date=get_utcnow(),
+            result=NEG)
+
+        day_one_test.save()
+
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='esr21_subject.pregoutcome',
+                subject_identifier=self.subject_identifier,
+                visit_code='1000',
+                visit_code_sequence='0').entry_status, NOT_REQUIRED)
 
         day_28_follow = mommy.make_recipe(
             'esr21_subject.subjectvisit',
@@ -103,26 +113,40 @@ class TestPregOutcome(TestCase):
             'esr21_subject.pregnancytest',
             subject_visit=day_28_follow,
             preg_performed=YES,
-            result=NEG)
+            preg_date=get_utcnow() + relativedelta(days=2),
+            result=POS)
 
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='esr21_subject.pregoutcome',
                 subject_identifier=self.subject_identifier,
                 visit_code='1028',
-                visit_code_sequence='0').entry_status, REQUIRED)
+                visit_code_sequence='0').entry_status, NOT_REQUIRED)
+
+        self.subject_visit.save()
+
+        day_one_test.save()
+
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='esr21_subject.pregoutcome',
+                subject_identifier=self.subject_identifier,
+                visit_code='1000',
+                visit_code_sequence='0').entry_status, NOT_REQUIRED)
 
         day_70_visit = mommy.make_recipe(
             'esr21_subject.subjectvisit',
             appointment=Appointment.objects.get(
                 visit_code='1070',
                 subject_identifier=self.subject_identifier),
-            report_datetime=get_utcnow() + relativedelta(days=70),
+            report_datetime=get_utcnow() + relativedelta(days=5),
             reason=SCHEDULED)
 
         mommy.make_recipe(
             'esr21_subject.pregnancytest',
             subject_visit=day_70_visit,
+            preg_date=get_utcnow() + relativedelta(days=5),
+            preg_performed=YES,
             result=NEG)
 
         self.assertEqual(
@@ -130,4 +154,9 @@ class TestPregOutcome(TestCase):
                 model='esr21_subject.pregoutcome',
                 subject_identifier=self.subject_identifier,
                 visit_code='1070',
-                visit_code_sequence='0').entry_status, NOT_REQUIRED)
+                visit_code_sequence='0').entry_status, REQUIRED)
+
+        mommy.make_recipe(
+            'esr21_subject.pregoutcome',
+            report_datetime=get_utcnow(),
+            subject_visit=day_70_visit, )
