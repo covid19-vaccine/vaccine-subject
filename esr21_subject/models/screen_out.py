@@ -37,7 +37,9 @@ class ScreenOut(UniqueSubjectIdentifierModelMixin, SiteModelMixin,
         verbose_name='What is the reason for screening failure',
         choices=SCREENOUT_CHOICES,
         max_length=25,
-        help_text="If 'OTHER', specify below"   
+        help_text="If 'OTHER', specify below",   
+        blank=True,
+        null=True
     )
     
     screen_out_other = OtherCharField()
