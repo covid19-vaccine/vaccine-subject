@@ -97,7 +97,7 @@ class MedicalHistory(CrfModelMixin):
     received_art = models.CharField(
         verbose_name='Has the participant ever taken anti-retroviral therapy or'
         'ART?',
-        max_length=18,
+        max_length=3,
         choices=YES_NO,
         default=NO)
 
