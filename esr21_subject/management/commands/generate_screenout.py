@@ -4,13 +4,14 @@ from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     
+    
     help = 'Create or Update the ScreenOut objects'
     
     screening_eligibility_model = 'esr21_subject.screeningeligibility'
     vaccination_details_model = 'esr21_subject.vaccinationdetails'
     informed_consent_model = 'esr21_subject.informedconsent'
     screen_out = 'esr21_subject.screenout'
-    
+
     @property
     def vaccination_details_cls(self):
         return django_apps.get_model(self.vaccination_details_model)
@@ -27,8 +28,20 @@ class Command(BaseCommand):
     def consent_model_cls(self):
         return django_apps.get_model(self.informed_consent_model)
     
-    def generate_screen_out(self):
-        consent_idx = self.consent_model_cls.objects.all().values_list('subject_identifier', flat=True)
+    def handle(self, *args, **kwargs):
+        identifiers = []
+        site_id = kwargs.get('site_id')
+
+        if site_id == 'all':
+            identifiers = self.consent_model_cls.objects.all().values_list('subject_identifier', flat=True)
+        else:
+            identifiers = self.consent_model_cls.objects.filter(
+                site_id=site_id).values_list('subject_identifier', flat=True)
+            
+        self.generate_screen_out(identifiers)  
+            
+                 
+    def generate_screen_out(self,consent_idx):
         for idx in consent_idx:
             try:
                 obj = self.screening_eligibility_cls.objects.get(
