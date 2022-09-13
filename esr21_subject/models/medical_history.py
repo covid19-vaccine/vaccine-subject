@@ -94,6 +94,13 @@ class MedicalHistory(CrfModelMixin):
         max_length=3
     )
 
+    received_art = models.CharField(
+        verbose_name='Has the participant ever taken anti-retroviral therapy or'
+        'ART?',
+        max_length=3,
+        choices=YES_NO,
+        default=NO)
+
     comorbidities = models.ManyToManyField(Diseases,
                                            verbose_name='Comorbidities')
 
