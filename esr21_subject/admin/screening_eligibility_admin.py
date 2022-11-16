@@ -1,15 +1,23 @@
 from django.contrib import admin
 from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
-
+from django.conf import settings
 from .modeladmin_mixins import ModelAdminMixin
 from ..admin_site import esr21_subject_admin
 from ..forms import ScreeningEligibilityForm
 from ..models import ScreeningEligibility
+from django.urls.base import reverse
+from django.urls.exceptions import NoReverseMatch
+
 
 
 @admin.register(ScreeningEligibility, site=esr21_subject_admin)
 class ScreeningEligibilityAdmin(ModelAdminMixin, admin.ModelAdmin):
     form = ScreeningEligibilityForm
+    
+    
+    screening_listboard_url_name = settings.DASHBOARD_URL_NAMES.get(
+        'screening_listboard_url')
+
 
     fieldsets = (
         (None, {
@@ -52,3 +60,12 @@ class ScreeningEligibilityAdmin(ModelAdminMixin, admin.ModelAdmin):
     }
 
     filter_horizontal = ('covid_symptoms', 'comorbidities', 'symptomatic_infections')
+    
+
+    def view_on_site(self, obj):
+        try:
+            url = reverse(
+                self.screening_listboard_url_name,)
+        except NoReverseMatch:
+            url = super().view_on_site(obj)
+        return url
