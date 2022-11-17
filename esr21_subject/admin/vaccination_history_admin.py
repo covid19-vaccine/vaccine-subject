@@ -5,6 +5,9 @@ from .modeladmin_mixins import ModelAdminMixin
 from ..admin_site import esr21_subject_admin
 from ..forms import VaccinationHistoryForm
 from ..models import VaccinationHistory
+from django.urls.base import reverse
+from django.urls.exceptions import NoReverseMatch
+from django.conf import settings
 
 
 @admin.register(VaccinationHistory, site=esr21_subject_admin)
@@ -12,6 +15,9 @@ class VaccinationHistoryAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     form = VaccinationHistoryForm
 
+    screening_listboard_url_name = settings.DASHBOARD_URL_NAMES.get(
+        'screening_listboard_url')
+    
     fieldsets = (
         (None, {
             'fields': (
@@ -44,3 +50,11 @@ class VaccinationHistoryAdmin(ModelAdminMixin, admin.ModelAdmin):
         'dose3_product_name': admin.VERTICAL,
         'source_of_info': admin.VERTICAL
     }
+
+    def view_on_site(self, obj):
+        try:
+            url = reverse(
+                self.screening_listboard_url_name,)
+        except NoReverseMatch:
+            url = super().view_on_site(obj)
+        return url
